@@ -31,8 +31,8 @@ $server = new Server(
     user: 'root',  // Scope::GetDeploy( deploy::resource_user ),
     port: 3306,
     pass: 'NoobScience',
-    database: 'menu',
-    label: 'MenuData',
+    database: 'ApproachScaffold',
+    label: 'TestData',
     // skip_connection: true
 );
 

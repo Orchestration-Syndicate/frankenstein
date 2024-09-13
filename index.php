@@ -1,0 +1,138 @@
+<?php
+
+/*
+ * Entry point for the ClimbUI application
+ */
+
+namespace ClimbUI;
+
+use Approach\Render\HTML;
+
+// disable errors
+error_reporting(0);
+
+global $body, $webpage;
+
+require_once __DIR__ . '/support/lib/vendor/autoload.php';
+
+$webpage = new HTML(tag: 'html');
+$webpage->before = '<!DOCTYPE html>' . PHP_EOL;
+
+$head = new HTML(tag: 'head');
+$head[] = $pageTitle = new HTML(tag: 'title', content: 'ClimbUI');
+$head[] = new HTML(tag: 'meta', attributes: [
+    'charset' => 'utf-8',
+], selfContained: true);
+$head[] = new HTML(tag: 'meta', attributes: [
+    'http-equiv' => 'X-UA-Compatible',
+    'content' => 'IE=edge',
+], selfContained: true);
+$head[] = new HTML(tag: 'meta', attributes: [
+    'name' => 'viewport',
+    'content' => 'width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0',
+], selfContained: true);
+$head[] = new HTML(tag: 'meta', attributes: [
+    'name' => 'author',
+    'content' => 'Ishan Joshi',
+], selfContained: true);
+
+// We will be using Bootstrap for the layout
+$head[] = new HTML(tag: 'link', attributes: [
+    'rel' => 'stylesheet',
+    'href' => '//cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css',
+], selfContained: true);
+
+// Rest are some custom styles and scripts
+/*$head[] = new HTML(tag: 'link', attributes: [*/
+/*    'rel' => 'stylesheet',*/
+/*    'type' => 'text/css',*/
+/*    'href' => '/static/css/layout.css',*/
+/*], selfContained: true);*/
+$head[] = new HTML(tag: 'link', attributes: [
+    'rel' => 'stylesheet',
+    'type' => 'text/css',
+    'href' => '/static/css/style.css',
+], selfContained: true);
+$head[] = new HTML(tag: 'link', attributes: [
+    'rel' => 'stylesheet',
+    'type' => 'text/css',
+    'href' => '/static/css/reset.css',
+], selfContained: true);
+/*$head[] = new HTML(tag: 'link', attributes: [*/
+/*    'rel' => 'stylesheet',*/
+/*    'type' => 'text/css',*/
+/*    'href' => '/static/css/menu.css',*/
+/*], selfContained: true);*/
+
+$head[] = $pageTitle;
+
+$head[] = new HTML(tag: 'link', attributes: [
+    'href' => 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
+    'rel' => 'stylesheet',
+], selfContained: true);
+$head[] = new HTML(tag: 'link', attributes: [
+    'href' => 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css',
+    'rel' => 'stylesheet',
+], selfContained: true);
+
+// JQuery baby!!
+$head[] = new HTML(tag: 'script', attributes: [
+    'src' => '//ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js',
+]);
+
+// The actual approach library
+$head[] = new HTML(tag: 'script', attributes: [
+    'type' => 'text/javascript',
+    'src' => '/static/js/approach/approach.interface.js',
+]);
+$head[] = new HTML(tag: 'script', attributes: [
+    'type' => 'text/javascript',
+    'src' => '/static/js/approach/approach.utility.js',
+]);
+
+
+$head[] = new HTML(tag: 'script', attributes: [
+    'src' => '/static/js/main.js',
+    'type' => 'module',
+]);
+
+$body = new HTML(tag: 'body');
+
+$filename = __DIR__ . '/config.json';
+$content = file_get_contents($filename);
+$config = json_decode($content, true);
+$repo = $config['CLIMBSUI_REPO'];
+$owner = $config['CLIMBSUI_OWNER'];
+
+$body->content = <<<HTML
+    <div class="Stage">
+        <div id="main" class="Screen">
+            <div class="Oyster Interface InterfaceContent controls">
+                <ul class="Toolbar controls">
+                    <li>
+                        <div    class="visual control"
+                                data-api="/server.php"
+                                data-api-method="POST"
+                                data-intent='{ "REFRESH": { "Climb" : "Menu" } }'
+                                data-context='{ "_response_target": ".Toolbar > .active > ul", "owner": "$owner", "repo": "$repo"}'
+                        >
+                            Menu
+                        </div>
+                        <ul></ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="Viewport">
+                <div id="content">
+                    <div class="ClimbsUI"></div>
+                </div>
+                <div id="result"></div>
+            </div>
+        </div>
+    </div>
+    HTML;
+
+$webpage[] = $head;
+$webpage[] = $body;
+
+echo $webpage->render();
