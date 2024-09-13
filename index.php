@@ -43,11 +43,11 @@ $head[] = new HTML(tag: 'link', attributes: [
 ], selfContained: true);
 
 // Rest are some custom styles and scripts
-/*$head[] = new HTML(tag: 'link', attributes: [*/
-/*    'rel' => 'stylesheet',*/
-/*    'type' => 'text/css',*/
-/*    'href' => '/static/css/layout.css',*/
-/*], selfContained: true);*/
+$head[] = new HTML(tag: 'link', attributes: [
+    'rel' => 'stylesheet',
+    'type' => 'text/css',
+    'href' => '/static/css/layout.css',
+], selfContained: true);
 $head[] = new HTML(tag: 'link', attributes: [
     'rel' => 'stylesheet',
     'type' => 'text/css',
@@ -58,11 +58,11 @@ $head[] = new HTML(tag: 'link', attributes: [
     'type' => 'text/css',
     'href' => '/static/css/reset.css',
 ], selfContained: true);
-/*$head[] = new HTML(tag: 'link', attributes: [*/
-/*    'rel' => 'stylesheet',*/
-/*    'type' => 'text/css',*/
-/*    'href' => '/static/css/menu.css',*/
-/*], selfContained: true);*/
+$head[] = new HTML(tag: 'link', attributes: [
+    'rel' => 'stylesheet',
+    'type' => 'text/css',
+    'href' => '/static/css/menu.css',
+], selfContained: true);
 
 $head[] = $pageTitle;
 
@@ -108,19 +108,35 @@ $body->content = <<<HTML
     <div class="Stage">
         <div id="main" class="Screen">
             <div class="Oyster Interface InterfaceContent controls">
+                <section class="header controls">
+                    <button class="backBtn">
+                        <div>
+                            <i class="expand fa fa-angle-left"></i>
+                        </div>
+                    </button>
+                    <button
+                        class="controls btn breadcrumbDropper current-state ms-2"
+                        id="menuButton"
+                    >
+                        <span id="menuButtonText"><span></span></span>
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <ul class="breadcrumbs" style="display: none"></ul>
+                </section>
                 <ul class="Toolbar controls">
                     <li>
                         <div    class="visual control"
                                 data-api="/server.php"
                                 data-api-method="POST"
-                                data-intent='{ "REFRESH": { "Climb" : "Menu" } }'
+                                data-intent='{ "REFRESH": { "Menu" : "Base" } }'
                                 data-context='{ "_response_target": ".Toolbar > .active > ul", "owner": "$owner", "repo": "$repo"}'
                         >
-                            Menu
+                            <p>Menu</p>
                         </div>
                         <ul></ul>
                     </li>
                 </ul>
+
             </div>
             <div class="Viewport">
                 <div id="content">

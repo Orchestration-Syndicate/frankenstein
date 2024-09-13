@@ -1,5 +1,6 @@
 <?php
-namespace ClimbUI\Render\Frankenstein;
+
+namespace Frankenstein\Render\OysterMenu;
 
 require_once __DIR__ . '/../../../support/lib/vendor/autoload.php';
 
@@ -45,6 +46,7 @@ use Stringable;
  *
  * @return Oyster
  */
+
 class Oyster extends HTML
 {
     public ?Header $header;
@@ -86,3 +88,4 @@ class Oyster extends HTML
         }
     }
 }
+

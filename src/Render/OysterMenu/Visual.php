@@ -1,5 +1,6 @@
 <?php
-namespace ClimbUI\Render\Frankenstein;
+
+namespace Frankenstein\Render\OysterMenu;
 
 require_once __DIR__ . '/../../../support/lib/vendor/autoload.php';
 
@@ -28,6 +29,7 @@ use Stringable;
  *
  * @return Visual
  */
+
 class Visual extends HTML
 {
     public function __construct(
@@ -63,3 +65,4 @@ class Visual extends HTML
         );
     }
 }
+

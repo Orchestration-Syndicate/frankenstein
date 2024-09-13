@@ -1,6 +1,5 @@
 <?php
-
-namespace ClimbUI\Render\Frankenstein;
+namespace Frankenstein\Render\OysterMenu;
 
 require_once __DIR__ . '/../../../support/lib/vendor/autoload.php';
 

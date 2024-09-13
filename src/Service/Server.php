@@ -9,10 +9,9 @@ use Approach\Service\flow;
 use Approach\Service\format;
 use Approach\Service\Service;
 use Approach\Service\target;
-use ClimbUI\Render\Frankenstein\Header;
-use ClimbUI\Render\Frankenstein\Oyster;
-use ClimbUI\Render\Frankenstein\Visual;
-use ClimbUI\Render\Frankenstein\Pearl;
+use Frankenstein\Render\Intent;
+use Frankenstein\Render\OysterMenu\Oyster;
+use Frankenstein\Render\OysterMenu\Pearl;
 
 require_once __DIR__ . '/../../support/lib/vendor/autoload.php';
 
@@ -55,17 +54,40 @@ class Server extends Service
     {
         $resource_path = $this->scope->GetPath(path::resource);
         $resource_path = str_replace('//', '/src/', $resource_path);
-        // TODO: Make this automatic
-        $resource_path .= '/MariaDB/TestData';
 
-        $entries = self::listFiles($resource_path, true, true);
-        
-        $pearl = new Pearl("Hello");
-        $pearls[] = $pearl;
+
+        $pearls = [];
+        $target = $context['_response_target'];
+        $path = $resource_path . $context['path'];
+        $entries = self::listFiles($path, true, true);
+
+        foreach ($entries as $entry => $data) {
+            if ($entry === 'root') {
+                continue;
+            }
+
+            $visual = new Intent(
+                tag: 'div',
+                classes: ['control', ' visual'],
+                context: ['_response_target' => $target, 'id' => $entry, 'path' => $context['path'] . '/' . $entry],
+                intent: ['REFRESH' => ['Menu' => 'Base']],
+                api: '/server.php',
+                method: 'POST',
+            );
+
+            $visual->content = $entry;
+
+            $pearl = new Pearl($visual);
+            $pearl->attributes['data-pearl'] = $entry;
+
+            $pearls[] = $pearl;
+        }
+
         $oyster = new Oyster(pearls: $pearls);
+
         return [
             'REFRESH' => [
-                $context['_response_target'] => '<div>' . json_encode($entries, JSON_PRETTY_PRINT) . '</div>',
+                $context['_response_target'] => $oyster->render(),
             ],
         ];
     }
@@ -101,7 +123,7 @@ class Server extends Service
             ]
         );
 
-        self::$registrar['Climb']['Menu'] = function ($context) {
+        self::$registrar['Menu']['Base'] = function ($context) {
             return $this->MakeMenu($context);
         };
         parent::__construct($flow, $auto_dispatch, $format_in, $format_out, $target_in, $target_out, $input, $output, $metadata);
