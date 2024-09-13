@@ -9,6 +9,10 @@ use Approach\Service\flow;
 use Approach\Service\format;
 use Approach\Service\Service;
 use Approach\Service\target;
+use ClimbUI\Render\Frankenstein\Header;
+use ClimbUI\Render\Frankenstein\Oyster;
+use ClimbUI\Render\Frankenstein\Visual;
+use ClimbUI\Render\Frankenstein\Pearl;
 
 require_once __DIR__ . '/../../support/lib/vendor/autoload.php';
 
@@ -55,7 +59,10 @@ class Server extends Service
         $resource_path .= '/MariaDB/TestData';
 
         $entries = self::listFiles($resource_path, true, true);
-
+        
+        $pearl = new Pearl("Hello");
+        $pearls[] = $pearl;
+        $oyster = new Oyster(pearls: $pearls);
         return [
             'REFRESH' => [
                 $context['_response_target'] => '<div>' . json_encode($entries, JSON_PRETTY_PRINT) . '</div>',
