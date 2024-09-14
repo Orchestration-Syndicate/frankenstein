@@ -3,42 +3,42 @@
  * */
 
 @font-face {
-  font-family: CafeDeParis;
-  src: url("/static/fonts/CafeDeParisSans-BWwJx.ttf") format("opentype");
+    font-family: CafeDeParis;
+    src: url("/static/fonts/CafeDeParisSans-BWwJx.ttf") format("opentype");
 }
 
 @font-face {
-  font-family: LeblancFree;
-  src: url("/static/fonts/LeblancFree-z8K0L.ttf") format("opentype");
+    font-family: LeblancFree;
+    src: url("/static/fonts/LeblancFree-z8K0L.ttf") format("opentype");
 }
 
 body {
-  background-color: #f9f9f5;
-  font-family: 'CafeDeParis', sans-serif;
+    background-color: #f9f9f5;
+    font-family: 'CafeDeParis', sans-serif;
 }
 
 .Screen {
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
-  justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    justify-content: space-between;
 }
 
 .Oyster {
-  width: 30%;
-  background-color: #f9f9f5;
+    width: 30%;
+    background-color: #f9f9f5;
 }
 
 .Viewport {
-  width: 70%;
-  background-color: #f9f9f5;
-  padding: 0 2rem;
+    width: 70%;
+    background-color: #f9f9f5;
+    padding: 0 2rem;
 }
 
 /* shifting up */
 
 p {
-  font-size: 1.9rem;
+    font-size: 1.9rem;
 }
 
 h1,
@@ -47,7 +47,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'CafeDeParis', sans-serif;
-  letter-spacing: 0.2em;
-  font-weight: bold;
+    font-family: 'CafeDeParis', sans-serif;
+    letter-spacing: 0.2em;
+    font-weight: bold;
 }

@@ -4,6 +4,7 @@ namespace Frankenstein\Service;
 
 use Approach\deploy;
 use Approach\path;
+use Approach\Resource\Aspect\Aspect;
 use Approach\Scope;
 use Approach\Service\flow;
 use Approach\Service\format;
@@ -20,6 +21,7 @@ class Server extends Service
     public static array $registrar = [];
     protected Scope $scope;
 
+    // List all files in a directory
     static function listFiles($path, $isRoot = true, $stripPHP = false)
     {
         $result = $isRoot ? ['root' => []] : [];
@@ -50,11 +52,12 @@ class Server extends Service
         return $result;
     }
 
-    public function MakeMenu($context)
+    // Generates only the base menu of the servers that are available in the resource dir constructed
+    // from Scope
+    public function MakeServerMenu($context)
     {
         $resource_path = $this->scope->GetPath(path::resource);
         $resource_path = str_replace('//', '/src/', $resource_path);
-
 
         $pearls = [];
         $target = $context['_response_target'];
@@ -70,7 +73,7 @@ class Server extends Service
                 tag: 'div',
                 classes: ['control', ' visual'],
                 context: ['_response_target' => $target, 'id' => $entry, 'path' => $context['path'] . '/' . $entry],
-                intent: ['REFRESH' => ['Menu' => 'Base']],
+                intent: ['REFRESH' => ['Menu' => 'Child']],
                 api: '/server.php',
                 method: 'POST',
             );
@@ -78,7 +81,58 @@ class Server extends Service
             $visual->content = $entry;
 
             $pearl = new Pearl($visual);
-            $pearl->attributes['data-pearl'] = $entry;
+            $pearls[] = $pearl;
+        }
+
+        $oyster = new Oyster(pearls: $pearls);
+
+        return [
+            'REFRESH' => [
+                $context['_response_target'] => $oyster->render(),
+            ],
+        ];
+    }
+
+    // Makes the actual menu and also refreshes the field content using the context of the current
+    // server and the path
+    public function MakeMenu($context)
+    {
+        $resource_path = $this->scope->GetPath(path::resource);
+        $resource_path = str_replace('//', '/src/', $resource_path);
+
+        $pearls = [];
+        $target = $context['_response_target'];
+        $path = $resource_path . $context['path'];
+        $entries = self::listFiles($path, true, true);
+        $entries = $entries['root'];
+
+        foreach ($entries as $key => $entry) {
+            $visual = new Intent(
+                tag: 'div',
+                classes: ['control', ' visual'],
+                context: ['_response_target' => $target, 'id' => $entry, 'path' => $context['path'] . '/' . $entry],
+                intent: ['REFRESH' => ['Menu' => 'Child']],
+                api: '/server.php',
+                method: 'POST',
+            );
+
+            $visual->content = $entry;
+
+            $pearl = new Pearl($visual);
+
+            // skip if Aspects is detected
+            if ($entry === 'Aspect') {
+                continue;
+            }
+
+            // TODO: Come up with a better way to recognize that it is server
+            if ($context['path'] != '') {
+                $curr_path = str_replace('/', '\\', $context['path']);
+                $classname = '\\' . $this->scope->project . '\\Resource' . $curr_path . '\\' . $entry;
+
+                $pearl->attributes['aspect-source'] = $classname;
+                $pearl->attributes['aspect-field'] = htmlentities(json_encode($classname::GetProfile()[Aspect::field]));
+            }
 
             $pearls[] = $pearl;
         }
@@ -89,6 +143,9 @@ class Server extends Service
             'REFRESH' => [
                 $context['_response_target'] => $oyster->render(),
             ],
+            'APPEND' => [
+                '#APPROACH_DEBUG_CONSOLE' => '<div>' . json_encode($entries, JSON_PRETTY_PRINT) . '</div>',
+            ]
         ];
     }
 
@@ -124,6 +181,9 @@ class Server extends Service
         );
 
         self::$registrar['Menu']['Base'] = function ($context) {
+            return $this->MakeServerMenu($context);
+        };
+        self::$registrar['Menu']['Child'] = function ($context) {
             return $this->MakeMenu($context);
         };
         parent::__construct($flow, $auto_dispatch, $format_in, $format_out, $target_in, $target_out, $input, $output, $metadata);

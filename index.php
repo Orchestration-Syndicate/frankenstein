@@ -142,7 +142,8 @@ $body->content = <<<HTML
                 <div id="content">
                     <div class="ClimbsUI"></div>
                 </div>
-                <div id="result"></div>
+                <div id="APPROACH_DEBUG_CONSOLE">
+                </div>
             </div>
         </div>
     </div>
