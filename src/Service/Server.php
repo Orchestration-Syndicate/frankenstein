@@ -2,17 +2,18 @@
 
 namespace Frankenstein\Service;
 
-use Approach\deploy;
-use Approach\path;
 use Approach\Resource\Aspect\Aspect;
-use Approach\Scope;
 use Approach\Service\flow;
 use Approach\Service\format;
 use Approach\Service\Service;
 use Approach\Service\target;
-use Frankenstein\Render\Intent;
+use Approach\deploy;
+use Approach\path;
+use Approach\Resource\Aspect\field;
+use Approach\Scope;
 use Frankenstein\Render\OysterMenu\Oyster;
 use Frankenstein\Render\OysterMenu\Pearl;
+use Frankenstein\Render\Intent;
 
 require_once __DIR__ . '/../../support/lib/vendor/autoload.php';
 
@@ -74,7 +75,6 @@ class Server extends Service
                 classes: ['control', ' visual'],
                 context: ['_response_target' => $target, 'id' => $entry, 'path' => $context['path'] . '/' . $entry],
                 intent: ['REFRESH' => ['Menu' => 'Child']],
-                api: '/server.php',
                 method: 'POST',
             );
 
@@ -106,13 +106,59 @@ class Server extends Service
         $entries = self::listFiles($path, true, true);
         $entries = $entries['root'];
 
+        if(count($entries) == 0){
+            $curr_path = str_replace('/', '\\', $context['path']);
+            $classname = '\\' . $this->scope->project . '\Resource' .  $curr_path;
+            // append Aspect to the path after the first \\
+            $aspectpath = explode('\\', $curr_path);
+            $temp = $aspectpath[1];
+            $temp .= '\\Aspect';
+            $aspectpath[1] = $temp;
+            $curr_path = implode('\\', $aspectpath);
+            $curr_path .= '\\field';
+
+            $aspect = '\\' . $this->scope->project . '\Resource' . $curr_path;
+            $aspect = $aspect::_approach_field_profile_[ field::label ];
+
+            $fields = $classname::GetProfile()[Aspect::field];
+            $field_names = [];
+            foreach ($fields as $key => $value) {
+                $field_names[] = $aspect[$key];
+            }
+
+            foreach ($field_names as $field_name) {
+                $visual = new Intent(
+                    tag: 'div',
+                    classes: ['control', ' visual'],
+                    context: ['_response_target' => $target, 'id' => $field_name, 'path' => $context['path'] . '/' . $field_name],
+                    intent: ['REFRESH' => ['Menu' => 'Render']],
+                    method: 'POST',
+                );
+
+                $visual->content = $field_name;
+
+                $pearl = new Pearl($visual);
+                $pearls[] = $pearl;
+            }
+
+            $oyster = new Oyster(pearls: $pearls);
+
+            return [
+                'REFRESH' => [
+                    $context['_response_target'] => $oyster->render(),
+                ],
+                'APPEND' => [
+                    '#APPROACH_DEBUG_CONSOLE' => '<div>' . json_encode($field_names, JSON_PRETTY_PRINT) . '</div>',
+                ]
+            ];
+        }
+
         foreach ($entries as $key => $entry) {
             $visual = new Intent(
                 tag: 'div',
                 classes: ['control', ' visual'],
                 context: ['_response_target' => $target, 'id' => $entry, 'path' => $context['path'] . '/' . $entry],
                 intent: ['REFRESH' => ['Menu' => 'Child']],
-                api: '/server.php',
                 method: 'POST',
             );
 
@@ -128,10 +174,21 @@ class Server extends Service
             // TODO: Come up with a better way to recognize that it is server
             if ($context['path'] != '') {
                 $curr_path = str_replace('/', '\\', $context['path']);
-                $classname = '\\' . $this->scope->project . '\\Resource' . $curr_path . '\\' . $entry;
+                $classname = '\\' . $this->scope->project . '\Resource' . $curr_path . '\\' . $entry;
+
+                $fields = $classname::GetProfile()[Aspect::field];
+
+                $converted = [];
+                foreach ($fields as $field => $descriptor) {
+                    $cases = field::getProfileProperties();
+                    $label = $descriptor[ field::label ];
+                    foreach($cases as $case => $index){
+                        $converted[$label][$case] = $descriptor[$index];
+                    }
+                }
 
                 $pearl->attributes['aspect-source'] = $classname;
-                $pearl->attributes['aspect-field'] = htmlentities(json_encode($classname::GetProfile()[Aspect::field]));
+                $pearl->attributes['aspect-field'] = htmlentities(json_encode($converted));
             }
 
             $pearls[] = $pearl;
@@ -160,7 +217,6 @@ class Server extends Service
         $output = [Service::STDOUT],
         mixed $metadata = [],
     ) {
-
         $path_to_project = __DIR__ . '/../../src/';
         $path_to_approach = __DIR__ . '/../../support/lib/approach/';
         $path_to_support = __DIR__ . '/../../support/';

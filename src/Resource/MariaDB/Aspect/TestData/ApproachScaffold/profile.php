@@ -100,5 +100,17 @@ public static function GetIndices(){
 		Aspect::quality => SelfQuality::_index_map,
 	];
 }
+public static function multi_match($which, $what)
+{
+	$result = null;
+	switch($which) {
+		case Aspect::quality:
+			$result = SelfQuality::match($what);
+			break;
+		default:
+			break;
+	}
+	return $result;
+}
 
 }

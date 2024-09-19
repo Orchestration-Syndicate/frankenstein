@@ -4,7 +4,7 @@
  * Entry point for the ClimbUI application
  */
 
-namespace ClimbUI;
+namespace Frankenstein;
 
 use Approach\Render\HTML;
 
@@ -89,7 +89,10 @@ $head[] = new HTML(tag: 'script', attributes: [
     'type' => 'text/javascript',
     'src' => '/static/js/approach/approach.utility.js',
 ]);
-
+/*$head[] = new HTML(tag: 'script', attributes: [*/
+/*    'type' => 'text/javascript',*/
+/*    'src' => '/static/js/approach/approach.displace.js',*/
+/*]);*/
 
 $head[] = new HTML(tag: 'script', attributes: [
     'src' => '/static/js/main.js',
@@ -98,16 +101,10 @@ $head[] = new HTML(tag: 'script', attributes: [
 
 $body = new HTML(tag: 'body');
 
-$filename = __DIR__ . '/config.json';
-$content = file_get_contents($filename);
-$config = json_decode($content, true);
-$repo = $config['CLIMBSUI_REPO'];
-$owner = $config['CLIMBSUI_OWNER'];
-
 $body->content = <<<HTML
     <div class="Stage">
         <div id="main" class="Screen">
-            <div class="Oyster Interface InterfaceContent controls">
+            <div class="Oyster Interface InterfaceContent controls" data-api="/server.php">
                 <section class="header controls">
                     <button class="backBtn">
                         <div>
@@ -140,7 +137,7 @@ $body->content = <<<HTML
             </div>
             <div class="Viewport">
                 <div id="content">
-                    <div class="ClimbsUI"></div>
+                    <div class="FrankensteinUI"></div>
                 </div>
                 <div id="APPROACH_DEBUG_CONSOLE">
                 </div>

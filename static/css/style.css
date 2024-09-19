@@ -225,8 +225,8 @@ ul {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-.ClimbUI select,
-.ClimbUI input[type="text"] {
+.Frankenstein select,
+.Frankenstein input[type="text"] {
   position: relative;
   display: block;
   width: 100%;
@@ -237,7 +237,7 @@ ul {
   margin-bottom: 1.2em;
 }
 
-.ClimbUI{
+.Frankenstein{
   font-size: 15pt;
 }
 
