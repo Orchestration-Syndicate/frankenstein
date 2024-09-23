@@ -76,7 +76,7 @@ class Server extends Service
             $visual = new Intent(
                 tag: 'div',
                 classes: ['control', ' visual', ' component-section'],
-                context: ['_response_target' => $target . ' > .components > li[data-pearl="' . $entry . '"]', 'id' => $entry, 'path' => $context['path'] . '/' . $entry],
+                context: ['_response_target' => $target . ' > ul > li[data-pearl="' . $entry . '"]', 'id' => $entry, 'path' => $context['path'] . '/' . $entry],
                 intent: ['APPEND' => ['Menu' => 'Child']],
             );
 
@@ -86,7 +86,7 @@ class Server extends Service
             $pearls[] = $pearl;
         }
 
-        $oyster = new Oyster(pearls: $pearls, classes: ['components', ' active']);
+        $oyster = new Oyster(pearls: $pearls, classes: ['Toolbar ', ' active']);
 
         return [
             'APPEND' => [
@@ -131,7 +131,7 @@ class Server extends Service
             foreach ($field_names as $field_name) {
                 $visual = new Intent(
                     tag: 'div',
-                    classes: ['control', ' visual', ' component-section', ' active'],
+                    classes: ['control', ' visual', ' component-section'],
                     context: ['_response_target' => $target, 'id' => $field_name, 'path' => $context['path'] . '/' . $field_name],
                     intent: ['APPEND' => ['Menu' => 'Render']],
                 );
@@ -142,7 +142,7 @@ class Server extends Service
                 $pearls[] = $pearl;
             }
 
-            $oyster = new Oyster(pearls: $pearls, classes: ['components ', 'active']);
+            $oyster = new Oyster(pearls: $pearls, classes: ['active']);
 
             $temp_target = str_replace('"', '\"', $target);
 
@@ -152,6 +152,9 @@ class Server extends Service
                 ],
                 'TRIGGER' => [
                     'changeMenu( {"selector":"' . $temp_target . '"} )' => []
+                ],
+                'REFRESH' => [
+                    '.Props' => '<div>Hello World</div>'
                 ]
             ];
         }
@@ -160,7 +163,7 @@ class Server extends Service
             $visual = new Intent(
                 tag: 'div',
                 classes: ['control', ' visual', ' component-section'],
-                context: ['_response_target' => $target . ' > .components > li[data-pearl="' . $entry . '"]', 'id' => $entry, 'path' => $context['path'] . '/' . $entry],
+                context: ['_response_target' => $target . ' > ul > li[data-pearl="' . $entry . '"]', 'id' => $entry, 'path' => $context['path'] . '/' . $entry],
                 intent: ['APPEND' => ['Menu' => 'Child']],
             );
 
@@ -196,7 +199,7 @@ class Server extends Service
             $pearls[] = $pearl;
         }
 
-        $oyster = new Oyster(pearls: $pearls, classes: ['components', ' active']);
+        $oyster = new Oyster(pearls: $pearls, classes: ['active']);
 
         $temp_target = str_replace('"', '\"', $target);
 

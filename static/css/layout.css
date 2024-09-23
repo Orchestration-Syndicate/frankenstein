@@ -90,7 +90,7 @@ body {
     margin-bottom: 0.5rem;
 }
 
-.components {
+.Oyster ul {
     list-style: none;
     padding-left: 0;
     margin-left: 0;
@@ -108,16 +108,8 @@ body {
     display: block !important;
 }
 
-.Oyster > .active > li{
+.Toolbar > .active > li{
     display: block !important;
-}
-
-.Oyster > .components > ul.active {
-    display: block !important;
-}
-
-.Oyster > .components > .active > ul{
-    display: none;
 }
 
 /* Inputs styling */

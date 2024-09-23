@@ -116,7 +116,7 @@ $body->content = <<<HTML
                 <button style="margin-left: 70px;">hide bound</button>
             </div>
             <div class="Oyster">
-                <div    class="visual control load"
+                <div class="header control"
                     data-intent='{ "REFRESH": { "Menu" : "Base" } }'
                     data-context='{ "_response_target": "#LeftPanel > .Oyster" }'>
                 <span>Load Menu</span>
@@ -136,25 +136,10 @@ $body->content = <<<HTML
                 <button style="margin-left: 50px;">empty only</button>
             </div>
             <h2>Target Component: ActionBox</h2>
-            <div class="component-section">
-                <h3>_self_id 1 | Suite_TextInput</h3>
-                <input type="text" name="_self_id_1" placeholder="_self_id 1" />
-            </div>
-            <div class="component-section">
-                <h3>title 1 | Suite_TextInput</h3>
-                <input type="text" name="title_1" placeholder="title 1" />
-            </div>
-            <div class="component-section">
-                <h3>opacity 1 | Suite_TextInput</h3>
-                <input type="text" name="opacity_1" placeholder="opacity 1" />
-            </div>
-            <div class="component-section">
-                <h3>link 1 | Suite_LinkInput</h3>
-                <input type="text" name="link_1" placeholder="link 1" />
-            </div>
+            <div class="Props"></div>
             <div class="component-section prop-type-container">
                 <label for="name">Name</label>
-                <input type="text" name="name" placeholder="name" />
+                <input type="text" name="hello" placeholder="name" />
                 <label for="prop_type">prop type</label>
                 <select name="prop_type">
                     <option value="Suite_TextInput">Suite_TextInput</option>
