@@ -1,4 +1,4 @@
-/* 
+/*
  * Defines the layout related styles for the application
  * */
 
@@ -14,32 +14,123 @@
 
 body {
     background-color: #f9f9f5;
-    font-family: 'CafeDeParis', sans-serif;
+    font-family: "Inter", sans-serif;
 }
 
 .Screen {
+    width: 100vw;
+    /*TODO: Fix some styles */
+
+    /*height: 100vh;*/
+    position: relative;
+    overflow: hidden;
+}
+
+#LeftPanel,
+#RightPanel {
+    width: 50vw;
+    margin: 0px;
+    position: relative;
+    overflow: auto;
+    z-index: 2;
+}
+
+#LeftPanel {
+    left: 0px;
+}
+
+#RightPanel {
+    right: 0px;
+}
+
+#Backdrop {
+    z-index: 1;
+}
+
+#Main {
+    z-index: 2;
     display: flex;
-    flex-direction: row;
-    height: 100vh;
+}
+
+#Overlay {
+    z-index: 30000;
+    top: 0px;
+    left: 0px;
+    width: 0px;
+    height: 0px;
+}
+
+#Offscreen {
+    position: absolute;
+    z-index: 0;
+    width: 0px;
+    height: 0px;
+    left: -100vw;
+    top: 0px;
+}
+
+/* Style for the panel contents */
+.panel-content {
+    padding: 1rem;
+}
+
+/* Style for the settings panel (right side) */
+#RightPanel {
+    background-color: #f4f4f4;
+}
+
+.component-section {
+    margin-top: 12px;
+    padding: 1rem;
+    border: 2px solid #212121;
+    border-radius: 5px;
+    display: none;
+}
+
+.component-section h3 {
+    margin-bottom: 0.5rem;
+}
+
+.components {
+    list-style: none;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.active {
+    display: block;
+}
+
+/* Inputs styling */
+/* input, select {
+    width: 100%;
+    margin-bottom: 0.5rem;
+} */
+
+input[name="name"] {
+    width: 40%;
+}
+
+.prop-type-container {
+    display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
-.Oyster {
-    width: 30%;
-    background-color: #f9f9f5;
+.prop-type-container select {
+    flex-grow: 1;
+    margin-right: 0.5rem;
 }
 
-.Viewport {
-    width: 70%;
-    background-color: #f9f9f5;
-    padding: 0 2rem;
+.prop-type-container button {
+    white-space: nowrap;
 }
 
 /* shifting up */
 
-p {
-    font-size: 1.9rem;
-}
+/*p {*/
+/*    font-size: 1.9rem;*/
+/*}*/
 
 h1,
 h2,
@@ -47,7 +138,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: 'CafeDeParis', sans-serif;
-    letter-spacing: 0.2em;
-    font-weight: bold;
+    font-family: "Inter", sans-serif;
+    /*letter-spacing: 0.2em;*/
+    /*font-weight: bold;*/
 }

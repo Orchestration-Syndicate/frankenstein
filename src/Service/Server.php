@@ -9,7 +9,9 @@ use Approach\Service\Service;
 use Approach\Service\target;
 use Approach\deploy;
 use Approach\path;
+use Approach\Render\HTML;
 use Approach\Resource\Aspect\field;
+use Approach\Resource\Aspect\state;
 use Approach\Scope;
 use Frankenstein\Render\OysterMenu\Oyster;
 use Frankenstein\Render\OysterMenu\Pearl;
@@ -72,22 +74,21 @@ class Server extends Service
 
             $visual = new Intent(
                 tag: 'div',
-                classes: ['control', ' visual'],
-                context: ['_response_target' => $target, 'id' => $entry, 'path' => $context['path'] . '/' . $entry],
-                intent: ['REFRESH' => ['Menu' => 'Child']],
-                method: 'POST',
+                classes: ['control', ' visual', ' component-section', ' active'],
+                context: ['_response_target' => $target . ' > .components > li[data-pearl="' . $entry . '"]', 'id' => $entry, 'path' => $context['path'] . '/' . $entry],
+                intent: ['APPEND' => ['Menu' => 'Child']],
             );
 
-            $visual->content = $entry;
+            $visual[] = new HTML('h3', content: $entry);
 
-            $pearl = new Pearl($visual);
+            $pearl = new Pearl($visual, $entry);
             $pearls[] = $pearl;
         }
 
-        $oyster = new Oyster(pearls: $pearls);
+        $oyster = new Oyster(pearls: $pearls, classes: ['components ']);
 
         return [
-            'REFRESH' => [
+            'APPEND' => [
                 $context['_response_target'] => $oyster->render(),
             ],
         ];
@@ -106,7 +107,7 @@ class Server extends Service
         $entries = self::listFiles($path, true, true);
         $entries = $entries['root'];
 
-        if(count($entries) == 0){
+        if (count($entries) == 0) {
             $curr_path = str_replace('/', '\\', $context['path']);
             $classname = '\\' . $this->scope->project . '\Resource' .  $curr_path;
             // append Aspect to the path after the first \\
@@ -118,7 +119,7 @@ class Server extends Service
             $curr_path .= '\\field';
 
             $aspect = '\\' . $this->scope->project . '\Resource' . $curr_path;
-            $aspect = $aspect::_approach_field_profile_[ field::label ];
+            $aspect = $aspect::_approach_field_profile_[field::label];
 
             $fields = $classname::GetProfile()[Aspect::field];
             $field_names = [];
@@ -129,26 +130,27 @@ class Server extends Service
             foreach ($field_names as $field_name) {
                 $visual = new Intent(
                     tag: 'div',
-                    classes: ['control', ' visual'],
+                    classes: ['control', ' visual', ' component-section', ' active'],
                     context: ['_response_target' => $target, 'id' => $field_name, 'path' => $context['path'] . '/' . $field_name],
-                    intent: ['REFRESH' => ['Menu' => 'Render']],
-                    method: 'POST',
+                    intent: ['APPEND' => ['Menu' => 'Render']],
                 );
 
-                $visual->content = $field_name;
+                $visual[] = new HTML('h3', content: $field_name);
 
-                $pearl = new Pearl($visual);
+                $pearl = new Pearl($visual, $field_name);
                 $pearls[] = $pearl;
             }
 
-            $oyster = new Oyster(pearls: $pearls);
+            $oyster = new Oyster(pearls: $pearls, classes: ['components ']);
+
+            $temp_target = str_replace('"', '\"', $target);
 
             return [
-                'REFRESH' => [
+                'APPEND' => [
                     $context['_response_target'] => $oyster->render(),
                 ],
-                'APPEND' => [
-                    '#APPROACH_DEBUG_CONSOLE' => '<div>' . json_encode($field_names, JSON_PRETTY_PRINT) . '</div>',
+                'TRIGGER' => [
+                    'changeMenu( {"selector":"' . $temp_target . '"} )' => []
                 ]
             ];
         }
@@ -156,15 +158,14 @@ class Server extends Service
         foreach ($entries as $key => $entry) {
             $visual = new Intent(
                 tag: 'div',
-                classes: ['control', ' visual'],
-                context: ['_response_target' => $target, 'id' => $entry, 'path' => $context['path'] . '/' . $entry],
-                intent: ['REFRESH' => ['Menu' => 'Child']],
-                method: 'POST',
+                classes: ['control', ' visual', ' component-section', ' active'],
+                context: ['_response_target' => $target . ' > .components > li[data-pearl="' . $entry . '"]', 'id' => $entry, 'path' => $context['path'] . '/' . $entry],
+                intent: ['APPEND' => ['Menu' => 'Child']],
             );
 
-            $visual->content = $entry;
+            $visual[] = new HTML('h3', content: $entry);
 
-            $pearl = new Pearl($visual);
+            $pearl = new Pearl($visual, $entry);
 
             // skip if Aspects is detected
             if ($entry === 'Aspect') {
@@ -181,8 +182,8 @@ class Server extends Service
                 $converted = [];
                 foreach ($fields as $field => $descriptor) {
                     $cases = field::getProfileProperties();
-                    $label = $descriptor[ field::label ];
-                    foreach($cases as $case => $index){
+                    $label = $descriptor[field::label];
+                    foreach ($cases as $case => $index) {
                         $converted[$label][$case] = $descriptor[$index];
                     }
                 }
@@ -194,14 +195,17 @@ class Server extends Service
             $pearls[] = $pearl;
         }
 
-        $oyster = new Oyster(pearls: $pearls);
+        $oyster = new Oyster(pearls: $pearls, classes: ['components ']);
+
+        $temp_target = str_replace('"', '\"', $target);
 
         return [
-            'REFRESH' => [
+            'APPEND' => [
                 $context['_response_target'] => $oyster->render(),
             ],
-            'APPEND' => [
-                '#APPROACH_DEBUG_CONSOLE' => '<div>' . json_encode($entries, JSON_PRETTY_PRINT) . '</div>',
+            'TRIGGER' => [
+                'changeMenu( {"selector":"' . $temp_target . '"} )' => []
+                // 'changeMenu( {"selector": ".Oyster"} )' => []
             ]
         ];
     }

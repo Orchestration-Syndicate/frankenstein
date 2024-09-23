@@ -296,51 +296,7 @@ Approach.Displacer = function(config = {}) {
 			}
 		},
 
-		// visual: {
-		// 	start: e => {
-		// 		dispatch.visual.create(e);
-		//
-		// 		$(document).on("mousemove", e.data, dispatch.visual.mousemove);
-		// 		$(document).on("mouseup", e.data, dispatch.visual.destroy);
-		//
-		// 		dispatch.visual.mousemove(e);
-		// 		dispatch.visual.show();
-		//
-		// 		// $elf.call.visual(e.data.displaceable);
-		// 	},
-		//
-		// 	create: e => {
-		// 		$elf.state.visual = getCopy(e.data.displaceable);
-		// 		$elf.state.visual.width(e.data.displaceable.width());
-		// 		$elf.state.visual.height(e.data.displaceable.height());
-		// 		$elf.state.visual.insertBefore(e.data.displaceable);
-		// 	},
-		//
-		// 	show: e => {
-		// 		$elf.state.visual.show(1000);
-		// 	},
-		// 	hide: e => {
-		// 		$elf.state.visual.hide(500);
-		// 	},
-		//
-		// 	mousemove: e => {
-		// 		let css = {
-		// 			"position": "fixed",
-		// 			"left": `${e.pageX}px`,
-		// 			"top": `${e.pageY}px`,
-		// 			"z-index": 9999999999,
-		// 		}
-		//
-		// 		$elf.state.visual.css(css);
-		// 	},
-		//
-		// 	destroy: e => {
-		// 		dispatch.visual.remove();
-		//
-		// 		$(document).off("mousemove", dispatch.visual.track);
-		// 		$(document).off("mouseup", dispatch.visual.destroy);
-		// 	}
-		// },
+	
 
 		isValidHandle: (target, handle) => {
 			if (target.is(handle) || $.contains(handle[0], target[0])) {

@@ -1,4 +1,5 @@
-//import { FrankensteinJS } from './frankenstein/frankenstein.js';
+import { FrankensteinJS } from './frankenstein/frankenstein.js';
+
 
 addScopeJS(['Frankenstein', 'active', {}]);
 
@@ -34,15 +35,13 @@ let onReadyHandle = function(element, selector, markup) {
         });
 
     // account for when the element itself is the Interface
+    // well it came from the copy paste 
+    // no need of this
     if ($(element).hasClass('Interface')) {
         let api = '/service/api.json';
         if ($(element).attr('data-api')) api = $(element).attr('data-api');
         element.Interface = new Interface({ Markup: element, api: api });
     }
-
-    // Normal document ready stuff, but relative to el
-    // el.find(...).myPlugin(..)
-    // ...
 
     $(element)
         .find('ul.Toolbar > li > .visual')
@@ -80,13 +79,6 @@ let onReadyHandle = function(element, selector, markup) {
             }
         });
 
-    // $(element)
-    //   .find('.Oyster .breadcrumbs')
-    //   .on('click', 'li', function (e) {
-    //     $('.Oyster .breadcrumbs li').removeClass('active');
-    //     e.stopPropagation();
-    //     $(this).addClass('active');
-    //   });
     $(element)
         .find('#menuButton')
         .click(function(e) {
@@ -106,81 +98,12 @@ let onReadyHandle = function(element, selector, markup) {
             }
         });
 
-    //let x = {};
-    //console.log($(element));
-    if ($(element).hasClass('FrankensteinUI')) {
+    let x = {};
+    console.log($(element));
+    //if ($(element).hasClass('FrankensteinUI')) {
         x = FrankensteinJS({ what: $(element) });
-    }
-
-    // // --> Add your custom event handlers here
-    // $('.add').click(function (e) {
-    //   e.preventDefault();
-    //   console.log('add');
-    //   let parent = $(this).closest('.inputs');
-    //   let name = parent.attr('id');
-    //   let container = $('<div>', { class: 'input-container' });
-    //   let id = parent.find('input').last().attr('name');
-    //   if (!id) {
-    //     id = name + '0';
-    //   } else {
-    //     id = id.substring(id.length - 1);
-    //     id = parseInt(id) + 1;
-    //     id = name + id;
-    //   }
-    //   let input = $('<input>', { type: 'text', name: id });
-    //   let removeButton = $('<button>', { type: 'button', class: 'remove' });
-    //   removeButton.append($('<i>', { class: 'bi bi-x' }));
-
-    //   container.append(input, removeButton);
-    //   parent.append(container);
-    // });
-
-    // $('.remove').click(function (e) {
-    //   e.preventDefault();
-    //   console.log('remove');
-    //   // remove it's parent
-    //   $(this).closest('.input-container').remove();
-    // });
-
-    // $('.add_plan').click(function (e) {
-    //   e.preventDefault();
-    //   console.log('add');
-    //   let parent = $(this).closest('.plan_inputs');
-    //   let name = parent.attr('id');
-    //   let container = $('<div>', { class: 'input-container' });
-    //   let id = parent.find('input').last().attr('name');
-    //   if (!id) {
-    //     id = name + '0';
-    //   } else {
-    //     id = id.substring(id.length - 1);
-    //     id = parseInt(id) + 1;
-    //     id = name + id;
-    //   }
-    //   let input = $('<input>', { type: 'text', name: id + '-quantity' });
-    //   let otherInput = $('<input>', { type: 'text', name: id + '-units' });
-    //   let removeButton = $('<button>', {
-    //     type: 'button',
-    //     class: 'remove_plan',
-    //   });
-
-    //   $('.remove_plan').click(function (e) {
-    //     e.preventDefault();
-    //     console.log('remove');
-    //     // remove it's parent
-    //     $(this).parent().remove();
-    //   });
-    //   removeButton.append($('<i>', { class: 'bi bi-x' }));
-    //   container.append(input, otherInput, removeButton);
-    //   parent.append(container);
-    // });
-
-    // $('.TabBar div').click(function () {
-    //   var tabId = $(this).attr('tab-activate');
-    //   $('main > div').removeClass('active');
-    //   $('main > div.tab' + tabId).addClass('active');
-    //   // animateCSS('.' + tabId, 'fadeIn');
-    // });
-    // --> End DOM Ready stuff
+        console.log("Hello!");
+    //}
 };
 
 $(document).ready(function() {

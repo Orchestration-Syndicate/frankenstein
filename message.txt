@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Action Box</title>
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"> -->
+    <style>
+        .Screen {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #LeftPanel, #RightPanel {
+            width: 50vw;
+            margin: 0px;
+            position: relative;
+            overflow: auto;
+            z-index: 2;
+        }
+
+        #LeftPanel {
+            left: 0px;
+        }
+
+        #RightPanel {
+            right: 0px;
+        }
+
+        #Backdrop {
+            z-index: 1;
+        }
+
+        #Main {
+            z-index: 2;
+            display: flex;
+        }
+
+        #Overlay {
+            z-index: 30000;
+            top: 0px;
+            left: 0px;
+            width: 0px;
+            height: 0px;
+        }
+
+        #Offscreen {
+            position: absolute;
+            z-index: 0;
+            width: 0px;
+            height: 0px;
+            left: -100vw;
+            top: 0px;
+        }
+
+        /* Style for the panel contents */
+        .panel-content {
+            padding: 1rem;
+        }
+
+        /* Style for the settings panel (right side) */
+        #RightPanel {
+            background-color: #f4f4f4;
+        }
+
+        .component-section {
+            margin-bottom: 1rem;
+        }
+
+        .component-section h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Inputs styling */
+        /* input, select {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        } */
+
+        input[name="name"] {
+            width: 40%;
+        }
+
+        .prop-type-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .prop-type-container select {
+            flex-grow: 1;
+            margin-right: 0.5rem;
+        }
+
+        .prop-type-container button {
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <section id="Backdrop" class="Screen"></section>
+
+    <section id="Main" class="Screen">
+        <!-- Left Panel -->
+        <section id="LeftPanel" class="panel-content">
+            <div style="display: flex; margin-right: 1rem;;">
+                <label for="source">source</label>
+                <select name="source" style="height: 30px; margin-left: 10px">
+                    <option value="jd">Component::ActionBox</option>
+                </select>
+
+                <button style="margin-left: 70px;">auto match</button>
+                <button style="margin-left: 70px;">hide bound</button>
+            </div>
+            <div class="component-section">
+                <h3>_self_id | text</h3>
+                <input type="text" name="_self_id" placeholder="_self_id" />
+            </div>
+            <div class="component-section">
+                <h3>title | text</h3>
+                <input type="text" name="title" placeholder="title" />
+            </div>
+            <div class="component-section">
+                <h3>message | text</h3>
+                <input type="text" name="message" placeholder="message" />
+            </div>
+            <div class="component-section">
+                <h3>action_text | text</h3>
+                <input type="text" name="action_text" placeholder="action_text" />
+            </div>
+            <div class="component-section">
+                <h3>img | text</h3>
+                <input type="text" name="img" placeholder="img" />
+            </div>
+            <div class="component-section">
+                <h3>bg_color | text</h3>
+                <input type="text" name="bg_color" placeholder="bg_color" />
+            </div>
+            <div class="component-section">
+                <h3>opacity | text</h3>
+                <input type="text" name="opacity" placeholder="opacity" />
+            </div>
+            <div class="component-section">
+                <h3>link | text</h3>
+                <input type="text" name="link" placeholder="link" />
+            </div>
+        </section>
+
+        <!-- Right Panel -->
+        <section id="RightPanel" class="panel-content">
+            <div style="display: flex;">
+                <label for="target">target</label>
+                <input type="text" name="target" placeholder="Component::ActionBox" style="margin-left: 5px;" />
+                <label for="tag">tag</label>
+                <input type="text" name="tag" placeholder="settings" style="margin-left: 5px;" />
+                <button style="margin-left: 50px;">load tag</button>
+                <button style="margin-left: 50px;">save</button>
+                <button style="margin-left: 50px;">empty only</button>
+            </div>
+            <h2>Target Component: ActionBox</h2>
+            <div class="component-section">
+                <h3>_self_id 1 | Suite_TextInput</h3>
+                <input type="text" name="_self_id_1" placeholder="_self_id 1" />
+            </div>
+            <div class="component-section">
+                <h3>title 1 | Suite_TextInput</h3>
+                <input type="text" name="title_1" placeholder="title 1" />
+            </div>
+            <div class="component-section">
+                <h3>opacity 1 | Suite_TextInput</h3>
+                <input type="text" name="opacity_1" placeholder="opacity 1" />
+            </div>
+            <div class="component-section">
+                <h3>link 1 | Suite_LinkInput</h3>
+                <input type="text" name="link_1" placeholder="link 1" />
+            </div>
+            <div class="component-section prop-type-container">
+                <label for="name">Name</label>
+                <input type="text" name="name" placeholder="name" />
+                <label for="prop_type">prop type</label>
+                <select name="prop_type">
+                    <option value="Suite_TextInput">Suite_TextInput</option>
+                    <option value="Suite_LinkInput">Suite_LinkInput</option>
+                </select>
+                <button type="button">Add</button>
+            </div>
+        </section>
+    </section>
+
+    <section id="Overlay" class="Screen"></section>
+    <section id="Offscreen" class="Screen"></section>
+</body>
+</html>

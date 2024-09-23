@@ -58,11 +58,11 @@ $head[] = new HTML(tag: 'link', attributes: [
     'type' => 'text/css',
     'href' => '/static/css/reset.css',
 ], selfContained: true);
-$head[] = new HTML(tag: 'link', attributes: [
-    'rel' => 'stylesheet',
-    'type' => 'text/css',
-    'href' => '/static/css/menu.css',
-], selfContained: true);
+/*$head[] = new HTML(tag: 'link', attributes: [*/
+/*    'rel' => 'stylesheet',*/
+/*    'type' => 'text/css',*/
+/*    'href' => '/static/css/menu.css',*/
+/*], selfContained: true);*/
 
 $head[] = $pageTitle;
 
@@ -102,48 +102,87 @@ $head[] = new HTML(tag: 'script', attributes: [
 $body = new HTML(tag: 'body');
 
 $body->content = <<<HTML
-    <div class="Stage">
-        <div id="main" class="Screen">
-            <div class="Oyster Interface InterfaceContent controls" data-api="/server.php">
-                <section class="header controls">
-                    <button class="backBtn">
-                        <div>
-                            <i class="expand fa fa-angle-left"></i>
-                        </div>
-                    </button>
-                    <button
-                        class="controls btn breadcrumbDropper current-state ms-2"
-                        id="menuButton"
-                    >
-                        <span id="menuButtonText"><span></span></span>
-                        <i class="fa fa-caret-down"></i>
-                    </button>
-                    <ul class="breadcrumbs" style="display: none"></ul>
-                </section>
-                <ul class="Toolbar controls">
-                    <li>
-                        <div    class="visual control"
-                                data-api="/server.php"
-                                data-api-method="POST"
-                                data-intent='{ "REFRESH": { "Menu" : "Base" } }'
-                                data-context='{ "_response_target": ".Toolbar > .active > ul", "owner": "$owner", "repo": "$repo"}'
-                        >
-                            <p>Menu</p>
-                        </div>
-                        <ul></ul>
-                    </li>
-                </ul>
+    <section id="Backdrop" class="Screen"></section>
 
+    <section id="Main" class="Screen">
+        <!-- Left Panel -->
+        <section id="LeftPanel" class="panel-content Interface InterfaceContent controls" data-api="/server.php" data-api-method="POST" >
+            <div style="display: flex; margin-right: 1rem;;">
+                <label for="source">source</label>
+                <select name="source" style="height: 30px; margin-left: 10px">
+                    <option value="jd">Component::ActionBox</option>
+                </select>
+                <button style="margin-left: 70px;">auto match</button>
+                <button style="margin-left: 70px;">hide bound</button>
             </div>
-            <div class="Viewport">
-                <div id="content">
-                    <div class="FrankensteinUI"></div>
+            <ul class="Oyster">
+                <div    class="visual control"
+                        data-intent='{ "REFRESH": { "Menu" : "Base" } }'
+                        data-context='{ "_response_target": "#LeftPanel > .Oyster" }'>
+                    <span>Load Menu</span>
                 </div>
-                <div id="APPROACH_DEBUG_CONSOLE">
+                <div class="control" data-role="trigger" data-action="toggleNextContainer">
+                    <span>Try Animation</span>
                 </div>
+            </ul>
+        </section>
+
+        <!-- Right Panel -->
+        <section id="RightPanel" class="panel-content">
+            <div style="display: flex;">
+                <label for="target">target</label>
+                <input type="text" name="target" placeholder="Component::ActionBox" style="margin-left: 5px;" />
+                <label for="tag">tag</label>
+                <input type="text" name="tag" placeholder="settings" style="margin-left: 5px;" />
+                <button style="margin-left: 50px;">load tag</button>
+                <button style="margin-left: 50px;">save</button>
+                <button style="margin-left: 50px;">empty only</button>
             </div>
-        </div>
-    </div>
+            <h2>Target Component: ActionBox</h2>
+            <div class="component-section">
+                <h3>_self_id 1 | Suite_TextInput</h3>
+                <input type="text" name="_self_id_1" placeholder="_self_id 1" />
+            </div>
+            <div class="component-section">
+                <h3>title 1 | Suite_TextInput</h3>
+                <input type="text" name="title_1" placeholder="title 1" />
+            </div>
+            <div class="component-section">
+                <h3>opacity 1 | Suite_TextInput</h3>
+                <input type="text" name="opacity_1" placeholder="opacity 1" />
+            </div>
+            <div class="component-section">
+                <h3>link 1 | Suite_LinkInput</h3>
+                <input type="text" name="link_1" placeholder="link 1" />
+            </div>
+            <div class="component-section prop-type-container">
+                <label for="name">Name</label>
+                <input type="text" name="name" placeholder="name" />
+                <label for="prop_type">prop type</label>
+                <select name="prop_type">
+                    <option value="Suite_TextInput">Suite_TextInput</option>
+                    <option value="Suite_LinkInput">Suite_LinkInput</option>
+                </select>
+                <button type="button">Add</button>
+            </div>
+        </section>
+    </section>
+
+    <section id="Overlay" class="Screen"></section>
+    <section id="Offscreen" class="Screen"></section>
+    <script>
+    function changeMenu(info){
+        // Remove the active class from current selector
+        \$(info.selector).find("div").removeClass('active');
+        let strippedSelector = info.selector.substring(0, info.selector.lastIndexOf('>'));
+        let sel = strippedSelector.trim();
+        // Remove it from all it's parents too
+        \$(sel).find("div").removeClass('active');
+        // Add the active class to the new selector
+        \$(info.selector + " > .components").find("div").addClass("active");
+        return sel
+    }
+    </script>
     HTML;
 
 $webpage[] = $head;
