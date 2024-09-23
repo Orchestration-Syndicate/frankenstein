@@ -84,7 +84,6 @@ body {
     padding: 1rem;
     border: 2px solid #212121;
     border-radius: 5px;
-    display: none;
 }
 
 .component-section h3 {
@@ -97,8 +96,28 @@ body {
     margin-left: 0;
 }
 
-.active {
+.visual{
+    display: none;
+}
+
+.load{
     display: block;
+}
+
+.active > li > .visual{
+    display: block !important;
+}
+
+.Oyster > .active > li{
+    display: block !important;
+}
+
+.Oyster > .components > ul.active {
+    display: block !important;
+}
+
+.Oyster > .components > .active > ul{
+    display: none;
 }
 
 /* Inputs styling */

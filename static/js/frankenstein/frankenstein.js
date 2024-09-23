@@ -15,7 +15,7 @@ Frankenstein.main = function (config = {}) {
         },
         displace: {
             // TODO: Change the source to match up properly
-            source: "#LeftPanel > .Oyster > .active ul.selected li[data_perl] > .visual",
+            source: "#LeftPanel > .Oyster > .active > li[data_perl] > .visual",
             dest: "#RightPanel > .Oyster > li[data-perl]",
             how: {
                 handle: ".visual",

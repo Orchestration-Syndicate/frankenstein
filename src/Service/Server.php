@@ -67,6 +67,7 @@ class Server extends Service
         $path = $resource_path . $context['path'];
         $entries = self::listFiles($path, true, true);
 
+        $i = 0;
         foreach ($entries as $entry => $data) {
             if ($entry === 'root') {
                 continue;
@@ -74,7 +75,7 @@ class Server extends Service
 
             $visual = new Intent(
                 tag: 'div',
-                classes: ['control', ' visual', ' component-section', ' active'],
+                classes: ['control', ' visual', ' component-section'],
                 context: ['_response_target' => $target . ' > .components > li[data-pearl="' . $entry . '"]', 'id' => $entry, 'path' => $context['path'] . '/' . $entry],
                 intent: ['APPEND' => ['Menu' => 'Child']],
             );
@@ -85,7 +86,7 @@ class Server extends Service
             $pearls[] = $pearl;
         }
 
-        $oyster = new Oyster(pearls: $pearls, classes: ['components ']);
+        $oyster = new Oyster(pearls: $pearls, classes: ['components', ' active']);
 
         return [
             'APPEND' => [
@@ -141,7 +142,7 @@ class Server extends Service
                 $pearls[] = $pearl;
             }
 
-            $oyster = new Oyster(pearls: $pearls, classes: ['components ']);
+            $oyster = new Oyster(pearls: $pearls, classes: ['components ', 'active']);
 
             $temp_target = str_replace('"', '\"', $target);
 
@@ -158,7 +159,7 @@ class Server extends Service
         foreach ($entries as $key => $entry) {
             $visual = new Intent(
                 tag: 'div',
-                classes: ['control', ' visual', ' component-section', ' active'],
+                classes: ['control', ' visual', ' component-section'],
                 context: ['_response_target' => $target . ' > .components > li[data-pearl="' . $entry . '"]', 'id' => $entry, 'path' => $context['path'] . '/' . $entry],
                 intent: ['APPEND' => ['Menu' => 'Child']],
             );
@@ -195,7 +196,7 @@ class Server extends Service
             $pearls[] = $pearl;
         }
 
-        $oyster = new Oyster(pearls: $pearls, classes: ['components ']);
+        $oyster = new Oyster(pearls: $pearls, classes: ['components', ' active']);
 
         $temp_target = str_replace('"', '\"', $target);
 

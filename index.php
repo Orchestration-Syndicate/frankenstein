@@ -115,16 +115,13 @@ $body->content = <<<HTML
                 <button style="margin-left: 70px;">auto match</button>
                 <button style="margin-left: 70px;">hide bound</button>
             </div>
-            <ul class="Oyster">
-                <div    class="visual control"
-                        data-intent='{ "REFRESH": { "Menu" : "Base" } }'
-                        data-context='{ "_response_target": "#LeftPanel > .Oyster" }'>
-                    <span>Load Menu</span>
+            <div class="Oyster">
+                <div    class="visual control load"
+                    data-intent='{ "REFRESH": { "Menu" : "Base" } }'
+                    data-context='{ "_response_target": "#LeftPanel > .Oyster" }'>
+                <span>Load Menu</span>
                 </div>
-                <div class="control" data-role="trigger" data-action="toggleNextContainer">
-                    <span>Try Animation</span>
-                </div>
-            </ul>
+            </div>
         </section>
 
         <!-- Right Panel -->
@@ -173,13 +170,12 @@ $body->content = <<<HTML
     <script>
     function changeMenu(info){
         // Remove the active class from current selector
-        \$(info.selector).find("div").removeClass('active');
+        //\$(info.selector).removeClass('active');
         let strippedSelector = info.selector.substring(0, info.selector.lastIndexOf('>'));
         let sel = strippedSelector.trim();
-        // Remove it from all it's parents too
-        \$(sel).find("div").removeClass('active');
-        // Add the active class to the new selector
-        \$(info.selector + " > .components").find("div").addClass("active");
+        \$(sel).removeClass('active');
+        //// Add the active class to the new selector
+        //\$(info.selector + " > .components").find("div").addClass("active");
         return sel
     }
     </script>
