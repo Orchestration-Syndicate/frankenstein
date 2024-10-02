@@ -53,11 +53,12 @@ body {
 }
 
 #Overlay {
-    z-index: 30000;
+    position: relative;
+    z-index: 3000;
     top: 0px;
     left: 0px;
-    width: 0px;
-    height: 0px;
+    width: 800px;
+    height: 10rem;
 }
 
 #Offscreen {
@@ -104,11 +105,11 @@ body {
     display: block;
 }
 
-.active > li > .visual {
+.active>li>.visual {
     display: block !important;
 }
 
-.Toolbar > .active > li {
+.Toolbar>.active>li {
     display: block !important;
 }
 
@@ -164,3 +165,20 @@ h6 {
 /*#RightPanel .Oyster .Toolbar .mapper-pearl .mappable-body {*/
 /*    display: none;*/
 /*}*/
+
+.icon-picker {
+    /*display: none;  */
+    width: 50%;
+    height: 100%;
+    border: 1px solid #ccc;
+}
+
+.icon-picker ul{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    list-style: none;
+}
+
+.icon-picker ul li{
+    margin: 5px;
+}

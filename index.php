@@ -105,6 +105,7 @@ $body->content = <<<HTML
     <section id="Backdrop" class="Screen"></section>
 
     <section id="Main" class="Screen">
+
         <!-- Left Panel -->
         <section id="LeftPanel" class="panel-content  controls" data-api="/server.php" data-api-method="POST" >
             <div style="display: flex; margin-right: 1rem;;">
@@ -156,7 +157,8 @@ $body->content = <<<HTML
         </section>
     </section>
 
-    <section id="Overlay" class="Screen"></section>
+    <section id="Overlay" class="Screen">
+    </section>
     <section id="Offscreen" class="Screen">
         <li class="mapper-pearl" data-pearl="">
             <div class="control visual">
@@ -166,39 +168,95 @@ $body->content = <<<HTML
             </div>
             <ul></ul>
         </li>
-
-        <div class="mappable-body"><label> prop type <select class="mapper-input source-select"><option value="TextInput"> TextInput </option><option value="TextArea"> TextArea </option><option value="NumericRange"> NumericRange </option><option value="NumericRange_WithSuggestions"> NumericRange_WithSuggestions </option><option value="DateRange"> DateRange </option><option value="LinkInput"> LinkInput </option><option value="DropDown"> DropDown </option><option value="Upload"> Upload </option><option value="Toggle"> Toggle </option><option value="Preset"> Preset </option><option value="ColorPicker"> ColorPicker </option><option value="RichText"> RichText </option><option value="RangeSlider"> RangeSlider </option><option value="Compositor_ContainerSettings"> Compositor_ContainerSettings </option><option value="Subcomponent"> Subcomponent </option><option value="">  </option><option value="Checklist"> Checklist </option><option value="Multiselect"> Multiselect </option><option value="Radio"> Radio </option><option value="Checkgroup"> Checkgroup </option><option value="Tabs"> Tabs </option><option value="Actions"> Actions </option><option value="Teams"> Teams </option><option value="Date"> Date </option><option value="NumericInput"> NumericInput </option></select></label>
-        <div><label> default <input class="mapper-input"></label></div>
-        <div><label> label <input class="mapper-input"></label></div>
-        <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> disabled <input type="checkbox" class="mapper-input"></label></div>
-        <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> hidden <input type="checkbox" class="mapper-input"></label></div>
-        <div><label> group number <input type="number" class="mapper-input"></label></div>
-        <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> required <input type="checkbox" class="mapper-input"></label></div>
-        <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> toolbar <input type="checkbox" class="mapper-input"></label></div>
-        <!---->
-        <div><label> source <input class="mapper-input"></label></div>
-        <div><label> extra <input class="mapper-input"></label></div>
-        <!---->
-        <div><label> formatter <input class="mapper-input"></label></div>
-        <div><label> sanitizer <input class="mapper-input"></label></div>
-        <div><label> validator <input class="mapper-input"></label></div>
+        <div class="icon-picker">
+            <ul>
+                <li class="control" data-role="trigger" data-action="clipboard-copy"><i class="icon bi bi-gear"></i>
+                    <p class="label">Gear</p>
+                </li>
+                <li class="control" data-role="trigger" data-action="clipboard-copy"><i class="icon bi bi-lightbulb"></i>
+                    <p class="label">LightBulb</p>
+                </li>
+                <li class="control" data-role="trigger" data-action="clipboard-copy"><i class="icon bi bi-boombox"></i>
+                    <p class="label">BoomBox</p></li>
+                <li class="control" data-role="trigger" data-action="clipboard-copy"><i class="icon bi bi-chat"></i>
+                    <p class="label">Chat</p>
+                </li>
+                <li class="control" data-role="trigger" data-action="clipboard-copy"><i class="icon bi bi-egg"></i>
+                    <p class="label">Egg</p>
+                </li>
+                <li class="control" data-role="trigger" data-action="clipboard-copy"><i class="icon bi bi-laptop"></i>
+                    <p class="label">Laptop</p>
+                </li>
+                <li class="control" data-role="trigger" data-action="clipboard-copy"><i class="icon bi bi-hdd"></i>
+                    <p class="label">Database</p></li>
+                <li class="control" data-role="trigger" data-action="clipboard-copy"><i class="icon bi bi-cloud"></i>
+                    <p class="label">Cloud</p>
+                </li>
+            </ul>
         </div>
 
-        <div class="mapper-field">
-            <div class="visual control">
-                <i class="fa"></i>
-                <label>TextInput</label>
-                <span class="control" data-role="trigger" data-action="composed-up.mapper">
-                    <i class="fa fa-arrow-up"></i>
-                </span>
-                <span class="control" data-role="trigger" data-action="composed-down.mapper">
-                    <i class="fa fa-arrow-down"></i>
-                </span>
-                <span class="control" data-role="trigger" data-action="new-setting.mapper">
-                    <i class="fa fa-times"></i>
-                </span>
-            </div>
+    <div class="mappable-body">
+    <label>
+        prop type 
+        <select class="mapper-input source-select">
+            <option value="TextInput"> TextInput </option>
+            <option value="TextArea"> TextArea </option>
+            <option value="NumericRange"> NumericRange </option>
+            <option value="NumericRange_WithSuggestions"> NumericRange_WithSuggestions </option>
+            <option value="DateRange"> DateRange </option>
+            <option value="LinkInput"> LinkInput </option>
+            <option value="DropDown"> DropDown </option>
+            <option value="Upload"> Upload </option>
+            <option value="Toggle"> Toggle </option>
+            <option value="Preset"> Preset </option>
+            <option value="ColorPicker"> ColorPicker </option>
+            <option value="RichText"> RichText </option>
+            <option value="RangeSlider"> RangeSlider </option>
+            <option value="Compositor_ContainerSettings"> Compositor_ContainerSettings </option>
+            <option value="Subcomponent"> Subcomponent </option>
+            <option value="">  </option>
+            <option value="Checklist"> Checklist </option>
+            <option value="Multiselect"> Multiselect </option>
+            <option value="Radio"> Radio </option>
+            <option value="Checkgroup"> Checkgroup </option>
+            <option value="Tabs"> Tabs </option>
+            <option value="Actions"> Actions </option>
+            <option value="Teams"> Teams </option>
+            <option value="Date"> Date </option>
+            <option value="NumericInput"> NumericInput </option>
+        </select>
+    </label>
+    <div><label> default <input class="mapper-input"></label></div>
+    <div><label> label <input class="mapper-input"></label></div>
+    <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> disabled <input type="checkbox" class="mapper-input"></label></div>
+    <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> hidden <input type="checkbox" class="mapper-input"></label></div>
+    <div><label> group number <input type="number" class="mapper-input"></label></div>
+    <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> required <input type="checkbox" class="mapper-input"></label></div>
+    <div class="control toolbar" data-role="trigger" data-action="toolbar-enable.mapper"><label> Toolbar <input type="checkbox" class="mapper-input"></label></div>
+    <!---->
+    <div><label> source <input class="mapper-input"></label></div>
+    <div><label> extra <input class="mapper-input"></label></div>
+    <!---->
+    <div><label> formatter <input class="mapper-input"></label></div>
+    <div><label> sanitizer <input class="mapper-input"></label></div>
+    <div><label> validator <input class="mapper-input"></label></div>
+    </div>
+
+    <div class="mapper-field">
+        <div class="visual control">
+            <i class="fa"></i>
+            <label>TextInput</label>
+            <span class="control" data-role="trigger" data-action="composed-up.mapper">
+                <i class="fa fa-arrow-up"></i>
+            </span>
+            <span class="control" data-role="trigger" data-action="composed-down.mapper">
+                <i class="fa fa-arrow-down"></i>
+            </span>
+            <span class="control" data-role="trigger" data-action="new-setting.mapper">
+                <i class="fa fa-times"></i>
+            </span>
         </div>
+    </div>
 
     </section>
     <script>
