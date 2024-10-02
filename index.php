@@ -99,14 +99,14 @@ $head[] = new HTML(tag: 'script', attributes: [
     'type' => 'module',
 ]);
 
-$body = new HTML(tag: 'body');
+$body = new HTML(tag: 'body', classes: ['Interface', ' InterfaceContent']);
 
 $body->content = <<<HTML
     <section id="Backdrop" class="Screen"></section>
 
     <section id="Main" class="Screen">
         <!-- Left Panel -->
-        <section id="LeftPanel" class="panel-content Interface InterfaceContent controls" data-api="/server.php" data-api-method="POST" >
+        <section id="LeftPanel" class="panel-content  controls" data-api="/server.php" data-api-method="POST" >
             <div style="display: flex; margin-right: 1rem;;">
                 <label for="source">source</label>
                 <select name="source" style="height: 30px; margin-left: 10px">
@@ -125,7 +125,7 @@ $body->content = <<<HTML
         </section>
 
         <!-- Right Panel -->
-        <section id="RightPanel" class="panel-content">
+        <section id="RightPanel" class="controls panel-content">
             <div style="display: flex;">
                 <label for="target">target</label>
                 <input type="text" name="target" placeholder="Component::ActionBox" style="margin-left: 5px;" />
@@ -135,23 +135,72 @@ $body->content = <<<HTML
                 <button style="margin-left: 50px;">save</button>
                 <button style="margin-left: 50px;">empty only</button>
             </div>
-            <h2>Target Component: ActionBox</h2>
-            <div class="Props"></div>
-            <div class="component-section prop-type-container">
-                <label for="name">Name</label>
-                <input type="text" name="hello" placeholder="name" />
-                <label for="prop_type">prop type</label>
-                <select name="prop_type">
-                    <option value="Suite_TextInput">Suite_TextInput</option>
-                    <option value="Suite_LinkInput">Suite_LinkInput</option>
-                </select>
-                <button type="button">Add</button>
+            <div class="Oyster">
+                <div class="header">
+                    <h2>Target Component: ActionBox</h2>
+                </div>
+                <ul class="Toolbar">
+                </ul>
+
+                <div class="component-section prop-type-container">
+                    <label for="name">Name</label>
+                    <input type="text" name="addProp" class="addProp" placeholder="name" />
+                    <label for="prop_type">prop type</label>
+                    <select name="prop_type">
+                        <option value="Suite_TextInput">Suite_TextInput</option>
+                        <option value="Suite_LinkInput">Suite_LinkInput</option>
+                    </select>
+                    <button type="button" class="control" data-role="trigger" data-action="new-setting.mapper">Add</button>
+                </div>
             </div>
         </section>
     </section>
 
     <section id="Overlay" class="Screen"></section>
-    <section id="Offscreen" class="Screen"></section>
+    <section id="Offscreen" class="Screen">
+        <li class="mapper-pearl" data-pearl="">
+            <div class="control visual">
+                <i class="fa"></i>
+                <label onclick="toggleDiv(event)">Mapper</label>
+                <i class="fa fa-arrow-right"></i>
+            </div>
+            <ul></ul>
+        </li>
+
+        <div class="mappable-body"><label> prop type <select class="mapper-input source-select"><option value="TextInput"> TextInput </option><option value="TextArea"> TextArea </option><option value="NumericRange"> NumericRange </option><option value="NumericRange_WithSuggestions"> NumericRange_WithSuggestions </option><option value="DateRange"> DateRange </option><option value="LinkInput"> LinkInput </option><option value="DropDown"> DropDown </option><option value="Upload"> Upload </option><option value="Toggle"> Toggle </option><option value="Preset"> Preset </option><option value="ColorPicker"> ColorPicker </option><option value="RichText"> RichText </option><option value="RangeSlider"> RangeSlider </option><option value="Compositor_ContainerSettings"> Compositor_ContainerSettings </option><option value="Subcomponent"> Subcomponent </option><option value="">  </option><option value="Checklist"> Checklist </option><option value="Multiselect"> Multiselect </option><option value="Radio"> Radio </option><option value="Checkgroup"> Checkgroup </option><option value="Tabs"> Tabs </option><option value="Actions"> Actions </option><option value="Teams"> Teams </option><option value="Date"> Date </option><option value="NumericInput"> NumericInput </option></select></label>
+        <div><label> default <input class="mapper-input"></label></div>
+        <div><label> label <input class="mapper-input"></label></div>
+        <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> disabled <input type="checkbox" class="mapper-input"></label></div>
+        <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> hidden <input type="checkbox" class="mapper-input"></label></div>
+        <div><label> group number <input type="number" class="mapper-input"></label></div>
+        <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> required <input type="checkbox" class="mapper-input"></label></div>
+        <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> toolbar <input type="checkbox" class="mapper-input"></label></div>
+        <!---->
+        <div><label> source <input class="mapper-input"></label></div>
+        <div><label> extra <input class="mapper-input"></label></div>
+        <!---->
+        <div><label> formatter <input class="mapper-input"></label></div>
+        <div><label> sanitizer <input class="mapper-input"></label></div>
+        <div><label> validator <input class="mapper-input"></label></div>
+        </div>
+
+        <div class="mapper-field">
+            <div class="visual control">
+                <i class="fa"></i>
+                <label>TextInput</label>
+                <span class="control" data-role="trigger" data-action="composed-up.mapper">
+                    <i class="fa fa-arrow-up"></i>
+                </span>
+                <span class="control" data-role="trigger" data-action="composed-down.mapper">
+                    <i class="fa fa-arrow-down"></i>
+                </span>
+                <span class="control" data-role="trigger" data-action="new-setting.mapper">
+                    <i class="fa fa-times"></i>
+                </span>
+            </div>
+        </div>
+
+    </section>
     <script>
     function changeMenu(info){
         // Remove the active class from current selector
@@ -163,6 +212,19 @@ $body->content = <<<HTML
         //\$(info.selector + " > .components").find("div").addClass("active");
         return sel
     }
+    function copyOffscreenControl(name) {
+        return $("#Offscreen ." + name).first().prop("outerHTML");
+    };
+    //function toggleDiv(e) {
+    //    console.log("Hello World");
+    //    let ele = $(e.target).closest(".mapper-pearl").find(".mappable-body").first();
+    //    console.log(ele);
+    //   if(ele.css("display") == "none"){
+    //        ele.css("display", "block");
+    //     } else {
+    //        ele.css("display", "none");
+    //     }
+    //}
     </script>
     HTML;
 

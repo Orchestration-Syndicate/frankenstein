@@ -1,24 +1,24 @@
-import { Displacer } from "../approach/approach.displace.js";
-import { Inflate } from "../approach/approach.inflate.js";
+import { Displacer } from '../approach/approach.displace.js';
+import { Inflate } from '../approach/approach.inflate.js';
 
-addScopeJS(["Frankenstein", "main"], {});
-addScopeJS(["Frankenstein", "active"], {});
+addScopeJS(['Frankenstein', 'main'], {});
+addScopeJS(['Frankenstein', 'active'], {});
 
 Frankenstein.main = function(config = {}) {
     let $elf = {};
 
     $elf.config = {
         mapper: {
-            main: ".ApproachMapper",
-            source: "#LeftPanel > .Oyster > .Toolbar li",
-            dest: "#RightPanel",
+            main: '.ApproachMapper',
+            source: '#LeftPanel > .Oyster > .Toolbar li',
+            dest: '#RightPanel > .Oyster',
         },
         displace: {
-            source: "#LeftPanel > .Oyster > .Toolbar .active > li",
-            dest: "#RightPanel > .Oyster > .Toolbar > li[data-perl]",
+            source: '#LeftPanel > .Oyster > .Toolbar .active > li[aspect-field]',
+            dest: '#RightPanel > .Oyster > .Toolbar li > .visual',
             how: {
-                handle: ".visual",
-                remain_in_source: true
+                handle: '.visual',
+                remain_in_source: true,
             },
         },
     };
@@ -28,78 +28,95 @@ Frankenstein.main = function(config = {}) {
     overwriteDefaults(config, $elf.config);
 
     $elf.init = function() {
-        console.log("Inited");
         let config = $elf.config;
 
         $elf.managed.inflater = new Inflate({
-            listen_target: $elf.config.displace.source,
-            toggle_effect: "slide",
+            toggle_effect: 'slide',
             toggle_speed: 800,
-            toggle_direction: "up",
+            toggle_direction: 'up',
         });
+
+        console.log("Initializing Displacer");
 
         $elf.managed.displacer = new Displacer({
             what: config.displace.source,
             where: config.displace.dest,
             how: {
                 handle: config.displace.handle,
-                remain_in_source: config.displace.how.remain_in_source
+                remain_in_source: config.displace.how.remain_in_source,
+                emit: 'composed-append.mapper',
             },
         });
 
-        console.log($(config.mapper.source));
+        $elf.managed.displacer.call.complete = function(e, ref) {
+            let dest = ref.state.preview[0];
+            if (dest == null) {
+                console.log('state what is empty', ref);
+            }
+            let $dest = $(dest);
+            let field_name = $dest.text();
+            let field_attributes = JSON.parse($dest.attr('aspect-field'));
+            console.log(field_name, field_attributes);
 
+            let $new_pearl = $(copyOffscreenControl('mapper-field'));
+            console.log($new_pearl);
+            $new_pearl.find('.visual label').first().text(field_name);
+            $new_pearl.find('.visual').first().attr('aspect-field', JSON.stringify(field_attributes));
+            $new_pearl.find('.visual').first().attr('aspect-name', field_name);
 
-        $(config.mapper.source).on("load.stuff", function(e) {
-            console.log("Loaded stuff");
+            $('#RightPanel > .Oyster > .Toolbar').append($new_pearl);
+        };
+
+        $(config.mapper.source).on('load.stuff', function(e) {
+            console.log('Loaded stuff');
         });
 
-        $(config.mapper.main).on("load-tag.mapper", function(e) {
+        $(config.mapper.main).on('load-tag.mapper', function(e) {
             dispatch.load_tag(e, config.mapper);
         });
-        $(config.mapper.main).on("source-change.mapper", function(e) {
+        $(config.mapper.main).on('source-change.mapper', function(e) {
             dispatch.source_change(e, config.mapper);
         });
-        $(config.mapper.main).on("auto-match.mapper", function(e) {
+        $(config.mapper.main).on('auto-match.mapper', function(e) {
             dispatch.auto_match(e, config.mapper);
         });
-        $(config.mapper.main).on("bound-toggle.mapper", function(e) {
+        $(config.mapper.main).on('bound-toggle.mapper', function(e) {
             dispatch.bound_toggle(e, config.mapper);
         });
-        $(config.mapper.main).on("empty-toggle.mapper", function(e) {
+        $(config.mapper.main).on('empty-toggle.mapper', function(e) {
             dispatch.empty_toggle(e, config.mapper);
         });
-        $(config.mapper.main).on("save.mapper", function(e) {
+        $(config.mapper.main).on('save.mapper', function(e) {
             dispatch.save(e, config.mapper);
         });
-        $(config.mapper.dest).on("new-setting.mapper", function(e) {
+        $(config.mapper.dest).on('new-setting.mapper', function(e) {
             dispatch.new_setting(e, config.mapper.dest);
         });
-        $(config.displace.dest).on("composed-append.mapper", function(e) {
+        $(config.mapper.dest).on('composed-append.mapper', function(e) {
             dispatch.composed_append(e, config.displace.dest);
         });
-        $(config.composed).on("composed-up.mapper", function(e) {
+        $(config.mapper.dest).on('composed-up.mapper', function(e) {
             dispatch.composed_up(e, config.composed);
         });
-        $(config.composed).on("composed-down.mapper", function(e) {
+        $(config.mapper.dest).on('composed-down.mapper', function(e) {
             dispatch.composed_down(e, config.composed);
         });
-        $(config.composed).on("composed-delete.mapper", function(e) {
+        $(config.mapper.dest).on('composed-delete.mapper', function(e) {
             dispatch.composed_delete(e, config.composed);
         });
-        $(config.toolbar).on("toolbar-enable.mapper", function(e) {
+        $(config.toolbar).on('toolbar-enable.mapper', function(e) {
             dispatch.toolbar_enable(e, config.toolbar);
         });
-        $(config.toolbar).on("toolbar-up.mapper", function(e) {
+        $(config.toolbar).on('toolbar-up.mapper', function(e) {
             dispatch.toolbar_up(e, config.toolbar);
         });
-        $(config.toolbar).on("toolbar-down.mapper", function(e) {
+        $(config.toolbar).on('toolbar-down.mapper', function(e) {
             dispatch.toolbar_down(e, config.toolbar);
         });
-        $(config.toolbar).on("toolbar-append.mapper", function(e) {
+        $(config.toolbar).on('toolbar-append.mapper', function(e) {
             dispatch.toolbar_append(e, config.toolbar);
         });
-        $(config.toolbar).on("toolbar-delete.mapper", function(e) {
+        $(config.toolbar).on('toolbar-delete.mapper', function(e) {
             dispatch.toolbar_delete(e, config.toolbar);
         });
         // handled by inflate //$( config.expand_setting ).on("expand-setting.mapper", function(e) { dispatch.expand_setting(e, config); });
@@ -126,12 +143,29 @@ Frankenstein.main = function(config = {}) {
         },
         composed_up: function(e, host_selector) {
             let host_container = $(e.target).closest(host_selector);
+            console.log("Okay got some composed_up stuff");
+            let target = $(e.target).closest("div.mapper-field").prev("div.mapper-field");
+            // find the li element closest to the target
+            let curr = $(e.target).closest("div.mapper-field");
+            // remove target from dom
+            target.remove();
+            // insert target after curr
+            curr.after(target);
+            console.log(target, curr);
         },
         composed_down: function(e, host_selector) {
             let host_container = $(e.target).closest(host_selector);
+            console.log("Okay got some composed_down stuff");
+            let next = $(e.target).closest("div.mapper-field").next("div.mapper-field");
+            // find the li element closest to the target
+            let target = $(e.target).closest("div.mapper-field");
+            // remove target from dom
+            next.after(target);
+            console.log(target, next);
         },
         composed_append: function(e, host_selector) {
             let host_container = $(e.target).closest(host_selector);
+            console.log('Moved stuff');
         },
         composed_delete: function(e, host_selector) {
             let host_container = $(e.target).closest(host_selector);
@@ -153,6 +187,17 @@ Frankenstein.main = function(config = {}) {
         },
         new_setting: function(e, host_selector) {
             let host_container = $(e.target).closest(host_selector);
+            let new_pearl = copyOffscreenControl('mapper-pearl');
+            let input = $('.addProp').val();
+            let body = copyOffscreenControl('mappable-body');
+
+            let $pearl = $(new_pearl);
+            $pearl.find('.visual label').first().text(input);
+            $pearl.find('.visual').first().append(body).prop('outerHTML');
+            let div = $('<div>').addClass('fields').addClass('controls').prop('outerHTML');
+            $pearl.find('.visual').first().append(div).prop('outerHTML');
+
+            $('#RightPanel > .Oyster > .Toolbar').append($pearl);
         },
         expand_setting: function(e, host_selector) {
             let host_container = $(e.target).closest(host_selector);
@@ -160,7 +205,7 @@ Frankenstein.main = function(config = {}) {
     };
 
     $elf.init();
-    console.log("Finished.");
+    console.log('Finished.');
     return $elf;
 };
 

@@ -11,7 +11,6 @@ use Approach\deploy;
 use Approach\path;
 use Approach\Render\HTML;
 use Approach\Resource\Aspect\field;
-use Approach\Resource\Aspect\state;
 use Approach\Scope;
 use Frankenstein\Render\OysterMenu\Oyster;
 use Frankenstein\Render\OysterMenu\Pearl;
@@ -67,7 +66,6 @@ class Server extends Service
         $path = $resource_path . $context['path'];
         $entries = self::listFiles($path, true, true);
 
-        $i = 0;
         foreach ($entries as $entry => $data) {
             if ($entry === 'root') {
                 continue;
@@ -140,7 +138,27 @@ class Server extends Service
 
                 $pearl = new Pearl($visual, $field_name);
                 $pearls[] = $pearl;
-            }
+
+                // TODO: Come up with a better way to recognize that it is server
+                // if ($context['path'] != '') {
+                $curr_path = str_replace('/', '\\', $context['path']);
+                $classname = '\\' . $this->scope->project . '\Resource' . $curr_path;
+
+                $fields = $classname::GetProfile()[Aspect::field];
+
+                $converted = [];
+                foreach ($fields as $field => $descriptor) {
+                    $cases = field::getProfileProperties();
+                    $label = $descriptor[field::label];
+                    foreach ($cases as $case => $index) {
+                        $converted[$label][$case] = $descriptor[$index];
+                    }
+                }
+                $pearl->attributes['aspect-source'] = $classname;
+                $pearl->attributes['aspect-field'] = htmlentities(json_encode($converted[$field_name]));
+
+                }
+                // }
 
             $oyster = new Oyster(pearls: $pearls, classes: ['active']);
 
@@ -176,25 +194,6 @@ class Server extends Service
                 continue;
             }
 
-            // TODO: Come up with a better way to recognize that it is server
-            if ($context['path'] != '') {
-                $curr_path = str_replace('/', '\\', $context['path']);
-                $classname = '\\' . $this->scope->project . '\Resource' . $curr_path . '\\' . $entry;
-
-                $fields = $classname::GetProfile()[Aspect::field];
-
-                $converted = [];
-                foreach ($fields as $field => $descriptor) {
-                    $cases = field::getProfileProperties();
-                    $label = $descriptor[field::label];
-                    foreach ($cases as $case => $index) {
-                        $converted[$label][$case] = $descriptor[$index];
-                    }
-                }
-
-                $pearl->attributes['aspect-source'] = $classname;
-                $pearl->attributes['aspect-field'] = htmlentities(json_encode($converted));
-            }
 
             $pearls[] = $pearl;
         }
@@ -209,7 +208,6 @@ class Server extends Service
             ],
             'TRIGGER' => [
                 'changeMenu( {"selector":"' . $temp_target . '"} )' => []
-                // 'changeMenu( {"selector": ".Oyster"} )' => []
             ]
         ];
     }

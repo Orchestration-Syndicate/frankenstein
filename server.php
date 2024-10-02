@@ -22,7 +22,7 @@ use \Approach\Service\format;
 use \Approach\Service\target;
 use \Approach\path;
 use \Approach\Scope;
-use Frankenstein\Service\Server as ServiceServer;
+use Frankenstein\Service\Server as Server;
 
 $path_to_project = __DIR__ . '/';
 $path_to_approach = __DIR__ . '/support/lib/approach/';
@@ -42,7 +42,7 @@ $scope = new Scope(
 // The php://input stream is needed apache2,
 // but essentially for now, we are explicitly using post-requests
 // So, any get requests will be ignored
-$service = new ServiceServer(
+$service = new Server(
     auto_dispatch: false,
     format_in: format::json,
     format_out: format::json,
