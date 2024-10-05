@@ -24,6 +24,8 @@ Frankenstein.main = function(config = {}) {
     };
     $elf.managed = {
         displacer: null,
+        toolbar: [],
+        composed: [],
     };
     overwriteDefaults(config, $elf.config);
 
@@ -59,10 +61,16 @@ Frankenstein.main = function(config = {}) {
             console.log(field_name, field_attributes);
 
             let $new_pearl = $(copyOffscreenControl('mapper-field'));
-            console.log($new_pearl);
             $new_pearl.find('.visual label').first().text(field_name);
             $new_pearl.find('.visual').first().attr('aspect-field', JSON.stringify(field_attributes));
             $new_pearl.find('.visual').first().attr('aspect-name', field_name);
+
+            $elf.managed.composed.push({ 'field': field_attributes, 'name': field_name });
+
+            let input = $(e.target).closest('.mapper-pearl').find('input[name="composed"]').first();
+            input.val(JSON.stringify($elf.managed.composed));
+
+            console.log('The input is:', input);
 
             $('#RightPanel > .Oyster > .Toolbar').append($new_pearl);
         };
@@ -92,6 +100,7 @@ Frankenstein.main = function(config = {}) {
         $(config.mapper.dest).on('new-setting.mapper', function(e) {
             dispatch.new_setting(e, config.mapper.dest);
         });
+        //TODO: Don't hardcode the overlay
         $(config.mapper.dest).on('composed-append.mapper', function(e) {
             dispatch.composed_append(e, config.displace.dest);
         });
@@ -104,22 +113,20 @@ Frankenstein.main = function(config = {}) {
         $(config.mapper.dest).on('composed-delete.mapper', function(e) {
             dispatch.composed_delete(e, config.composed);
         });
-        $(config.mapper.dest).on('clipboard-copy.mapper', function(e) {
-            dispatch.clipboard_copy(e, config.mapper.dest);
-        });
         $(config.mapper.dest).on('toolbar-enable.mapper', function(e) {
             dispatch.toolbar_enable(e, config.toolbar);
         });
-        $(config.toolbar).on('toolbar-up.mapper', function(e) {
+        $(config.mapper.dest).on('toolbar-up.mapper', function(e) {
             dispatch.toolbar_up(e, config.toolbar);
+            console.log("From the toolbar-up")
         });
-        $(config.toolbar).on('toolbar-down.mapper', function(e) {
+        $(config.mapper.dest).on('toolbar-down.mapper', function(e) {
             dispatch.toolbar_down(e, config.toolbar);
         });
-        $(config.toolbar).on('toolbar-append.mapper', function(e) {
+        $("#Overlay > #IconPicker").on('toolbar-append.mapper', function(e) {
             dispatch.toolbar_append(e, config.toolbar);
         });
-        $(config.toolbar).on('toolbar-delete.mapper', function(e) {
+        $(config.mapper.dest).on('toolbar-delete.mapper', function(e) {
             dispatch.toolbar_delete(e, config.toolbar);
         });
         // handled by inflate //$( config.expand_setting ).on("expand-setting.mapper", function(e) { dispatch.expand_setting(e, config); });
@@ -168,7 +175,7 @@ Frankenstein.main = function(config = {}) {
         },
         composed_append: function(e, host_selector) {
             let host_container = $(e.target).closest(host_selector);
-            console.log('Moved stuff');
+            // console.log('Moved stuff');
         },
         composed_delete: function(e, host_selector) {
             let host_container = $(e.target).closest(host_selector);
@@ -176,36 +183,67 @@ Frankenstein.main = function(config = {}) {
         toolbar_enable: function(e, host_selector) {
             let host_container = $(e.target).closest(host_selector);
             console.log("The toolbar is enabled TIMMY!", e.target);
-            let icon_picker = copyOffscreenControl('icon-picker');
+            //let icon_picker = copyOffscreenControl('icon-picker');
 
-            $(e.target).append(icon_picker);
+            //$(e.target).append(icon_picker);
+            let left = e.target.clientWidth;
+            let top = e.target.clientHeight;
+            console.log(e);
+
+            // set position of #IconPicker to left and top
+            $('#IconPicker').css('left', left + 'px');
+            $('#IconPicker').css('top', top + 'px');
+            $('#IconPicker').css('display', 'block');
         },
-        clipboard_copy: function(e, host_selector) {
+        toolbar_up: function(e, host_selector) {
+            let host_container = $(e.target).closest(host_selector);
+            console.log("Okay got some toolbar_up stuff");
+            let target = $(e.target).closest("div.toolbar-icon").prev("div.toolbar-icon");
+            let curr = $(e.target).closest("div.toolbar-icon");
+            target.remove();
+            curr.after(target);
+        },
+        toolbar_down: function(e, host_selector) {
+            let host_container = $(e.target).closest(host_selector);
+            console.log("Okay got some toolbar_down stuff");
+            let next = $(e.target).closest("div.toolbar-icon").next("div.toolbar-icon");
+            let target = $(e.target).closest("div.toolbar-icon");
+            next.after(target);
+            console.log(target, next);
+        },
+        toolbar_append: function(e, host_selector) {
+            let host_container = $(e.target).closest(host_selector);
             console.log("We are in the clipboard TIMMY!", e.target);
             let $target = $(e.target);
             let icon = $target.find('.icon').first().clone();
             let label = $target.find('.label').first().clone();
-            let copy = $('<div>').addClass('toolbar-icon').append(icon).append(label);
-
-            // search if there is already a toolbar-icon in the toolbar
-            // if so, remove it
-            let existing = $(e.target).parent().parent().prev('.toolbar-icon');
-            if (existing.length > 0) {
-                existing.remove();
-            }
-            $(e.target).parent().parent().before(copy);
-        },
-        toolbar_up: function(e, host_selector) {
-            let host_container = $(e.target).closest(host_selector);
-        },
-        toolbar_down: function(e, host_selector) {
-            let host_container = $(e.target).closest(host_selector);
-        },
-        toolbar_append: function(e, host_selector) {
-            let host_container = $(e.target).closest(host_selector);
+            let copy = copyOffscreenControl('toolbar-icon');
+            let $copy = $(copy).clone();
+            // remove any existing icon and label
+            $copy.find('.icon').remove();
+            $copy.find('.label').remove();
+            $copy.find(".visual").first().before(icon).before(label);
+            // get class name of icon and push to toolbar
+            let icon_class = icon.attr('class').split(' ')[2];
+            $elf.managed.toolbar.push({ 'icon': icon_class, 'label': label.text() });
+            console.log($elf.managed.toolbar);
+            // get input in .toolbar
+            let $input = $('.toolbar').find('input').first();
+            $input.val(JSON.stringify($elf.managed.toolbar));
+            $(".toolbar").append($copy);
         },
         toolbar_delete: function(e, host_selector) {
             let host_container = $(e.target).closest(host_selector);
+            let $target = $(e.target).closest('div.toolbar-icon');
+            //remove the target from the dom
+            // get label of target and remove from toolbar
+            let label = $target.find('.label').first().text();
+            $elf.managed.toolbar = $elf.managed.toolbar.filter(function(item) {
+                return item.label !== label;
+            });
+            let $input = $('.toolbar').find('input').first();
+            $input.val(JSON.stringify($elf.managed.toolbar));
+            $target.remove();
         },
         new_setting: function(e, host_selector) {
             let host_container = $(e.target).closest(host_selector);

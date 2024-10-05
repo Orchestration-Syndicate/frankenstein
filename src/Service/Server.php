@@ -156,9 +156,8 @@ class Server extends Service
                 }
                 $pearl->attributes['aspect-source'] = $classname;
                 $pearl->attributes['aspect-field'] = htmlentities(json_encode($converted[$field_name]));
-
-                }
-                // }
+            }
+            // }
 
             $oyster = new Oyster(pearls: $pearls, classes: ['active']);
 
@@ -212,6 +211,17 @@ class Server extends Service
         ];
     }
 
+    public function SaveMenu($context)
+    {
+        $menu = $context['Menu'];
+
+        return [
+            'REFRESH' => [
+                $context['_response_target'] => '<div>Menu Saved with data: ' . json_encode($menu) . '</div>'
+            ],
+        ];
+    }
+
     public function __construct(
         flow $flow = flow::in,
         bool $auto_dispatch = false,
@@ -247,6 +257,9 @@ class Server extends Service
         };
         self::$registrar['Menu']['Child'] = function ($context) {
             return $this->MakeMenu($context);
+        };
+        self::$registrar['Menu']['Save'] = function ($context) {
+            return $this->SaveMenu($context);
         };
         parent::__construct($flow, $auto_dispatch, $format_in, $format_out, $target_in, $target_out, $input, $output, $metadata);
     }

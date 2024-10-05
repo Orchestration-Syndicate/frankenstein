@@ -89,10 +89,10 @@ $head[] = new HTML(tag: 'script', attributes: [
     'type' => 'text/javascript',
     'src' => '/static/js/approach/approach.utility.js',
 ]);
-/*$head[] = new HTML(tag: 'script', attributes: [*/
-/*    'type' => 'text/javascript',*/
-/*    'src' => '/static/js/approach/approach.displace.js',*/
-/*]);*/
+$head[] = new HTML(tag: 'script', attributes: [
+    'type' => 'text/javascript',
+    'src' => '/static/js/approach/approach.autoform.js',
+]);
 
 $head[] = new HTML(tag: 'script', attributes: [
     'src' => '/static/js/main.js',
@@ -104,8 +104,8 @@ $body = new HTML(tag: 'body', classes: ['Interface', ' InterfaceContent']);
 $body->content = <<<HTML
     <section id="Backdrop" class="Screen"></section>
 
-    <section id="Main" class="Screen">
-
+    <section id="Main" class="Screen controls">
+        <div id="test_area"></div>
         <!-- Left Panel -->
         <section id="LeftPanel" class="panel-content  controls" data-api="/server.php" data-api-method="POST" >
             <div style="display: flex; margin-right: 1rem;;">
@@ -126,14 +126,14 @@ $body->content = <<<HTML
         </section>
 
         <!-- Right Panel -->
-        <section id="RightPanel" class="controls panel-content">
+        <form id="RightPanel" class="Autoform panel-content" data-action="Menu">
             <div style="display: flex;">
                 <label for="target">target</label>
                 <input type="text" name="target" placeholder="Component::ActionBox" style="margin-left: 5px;" />
                 <label for="tag">tag</label>
                 <input type="text" name="tag" placeholder="settings" style="margin-left: 5px;" />
                 <button style="margin-left: 50px;">load tag</button>
-                <button style="margin-left: 50px;">save</button>
+                <button type="button" class="control" data-role="autoform" data-intent='{ "REFRESH" : { "Menu" : "Save" } }' data-api-method="POST" data-context='{ "_response_target" : "#test_area" }' style="margin-left: 50px;">save</button>
                 <button style="margin-left: 50px;">empty only</button>
             </div>
             <div class="Oyster">
@@ -142,7 +142,6 @@ $body->content = <<<HTML
                 </div>
                 <ul class="Toolbar">
                 </ul>
-
                 <div class="component-section prop-type-container">
                     <label for="name">Name</label>
                     <input type="text" name="addProp" class="addProp" placeholder="name" />
@@ -154,10 +153,36 @@ $body->content = <<<HTML
                     <button type="button" class="control" data-role="trigger" data-action="new-setting.mapper">Add</button>
                 </div>
             </div>
-        </section>
+        </form>
     </section>
 
     <section id="Overlay" class="Screen">
+        <div id="IconPicker" class="controls">
+            <ul>
+                <li class="control" data-role="trigger" data-action="toolbar-append.mapper"><i class="icon bi bi-gear"></i>
+                    <span class="label">Gear</span>
+                </li>
+                <li class="control" data-role="trigger" data-action="toolbar-append.mapper"><i class="icon bi bi-lightbulb"></i>
+                    <span class="label">LightBulb</span>
+                </li>
+                <li class="control" data-role="trigger" data-action="toolbar-append.mapper"><i class="icon bi bi-boombox"></i>
+                    <span class="label">BoomBox</span></li>
+                <li class="control" data-role="trigger" data-action="toolbar-append.mapper"><i class="icon bi bi-chat"></i>
+                    <span class="label">Chat</span>
+                </li>
+                <li class="control" data-role="trigger" data-action="toolbar-append.mapper"><i class="icon bi bi-egg"></i>
+                    <span class="label">Egg</span>
+                </li>
+                <li class="control" data-role="trigger" data-action="toolbar-append.mapper"><i class="icon bi bi-laptop"></i>
+                    <span class="label">Laptop</span>
+                </li>
+                <li class="control" data-role="trigger" data-action="toolbar-append.mapper"><i class="icon bi bi-hdd"></i>
+                    <span class="label">Database</span></li>
+                <li class="control" data-role="trigger" data-action="toolbar-append.mapper"><i class="icon bi bi-cloud"></i>
+                    <span class="label">Cloud</span>
+                </li>
+            </ul>
+        </div>
     </section>
     <section id="Offscreen" class="Screen">
         <li class="mapper-pearl" data-pearl="">
@@ -168,36 +193,10 @@ $body->content = <<<HTML
             </div>
             <ul></ul>
         </li>
-        <div class="icon-picker">
-            <ul>
-                <li class="control" data-role="trigger" data-action="clipboard-copy"><i class="icon bi bi-gear"></i>
-                    <p class="label">Gear</p>
-                </li>
-                <li class="control" data-role="trigger" data-action="clipboard-copy"><i class="icon bi bi-lightbulb"></i>
-                    <p class="label">LightBulb</p>
-                </li>
-                <li class="control" data-role="trigger" data-action="clipboard-copy"><i class="icon bi bi-boombox"></i>
-                    <p class="label">BoomBox</p></li>
-                <li class="control" data-role="trigger" data-action="clipboard-copy"><i class="icon bi bi-chat"></i>
-                    <p class="label">Chat</p>
-                </li>
-                <li class="control" data-role="trigger" data-action="clipboard-copy"><i class="icon bi bi-egg"></i>
-                    <p class="label">Egg</p>
-                </li>
-                <li class="control" data-role="trigger" data-action="clipboard-copy"><i class="icon bi bi-laptop"></i>
-                    <p class="label">Laptop</p>
-                </li>
-                <li class="control" data-role="trigger" data-action="clipboard-copy"><i class="icon bi bi-hdd"></i>
-                    <p class="label">Database</p></li>
-                <li class="control" data-role="trigger" data-action="clipboard-copy"><i class="icon bi bi-cloud"></i>
-                    <p class="label">Cloud</p>
-                </li>
-            </ul>
-        </div>
 
     <div class="mappable-body">
     <label>
-        prop type 
+        prop type
         <select class="mapper-input source-select">
             <option value="TextInput"> TextInput </option>
             <option value="TextArea"> TextArea </option>
@@ -232,11 +231,15 @@ $body->content = <<<HTML
     <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> hidden <input type="checkbox" class="mapper-input"></label></div>
     <div><label> group number <input type="number" class="mapper-input"></label></div>
     <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> required <input type="checkbox" class="mapper-input"></label></div>
-    <div class="control toolbar" data-role="trigger" data-action="toolbar-enable.mapper"><label> Toolbar <input type="checkbox" class="mapper-input"></label></div>
+    <div class="toolbar">
+        <input type="hidden" name="toolbar" value="{}" />
+    </div>
+    <div class="control" data-role="trigger" data-action="toolbar-enable.mapper"><label> Toolbar <input type="checkbox" class="mapper-input"></label></div>
     <!---->
     <div><label> source <input class="mapper-input"></label></div>
     <div><label> extra <input class="mapper-input"></label></div>
-    <!---->
+            <!---->
+    <input type="hidden" name="composed" value="{}" />
     <div><label> formatter <input class="mapper-input"></label></div>
     <div><label> sanitizer <input class="mapper-input"></label></div>
     <div><label> validator <input class="mapper-input"></label></div>
@@ -256,6 +259,20 @@ $body->content = <<<HTML
                 <i class="fa fa-times"></i>
             </span>
         </div>
+    </div>
+
+    <div class="toolbar-icon">
+        <span class="visual control">
+            <span class="control" data-role="trigger" data-action="toolbar-up.mapper">
+                <i class="fa fa-arrow-up"></i>
+            </span>
+            <span class="control" data-role="trigger" data-action="toolbar-down.mapper">
+                <i class="fa fa-arrow-down"></i>
+            </span>
+            <span class="control" data-role="trigger" data-action="toolbar-delete.mapper">
+                <i class="fa fa-times"></i>
+            </span>
+        </span>
     </div>
 
     </section>

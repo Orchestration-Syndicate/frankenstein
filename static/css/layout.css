@@ -105,11 +105,11 @@ body {
     display: block;
 }
 
-.active>li>.visual {
+.active > li > .visual {
     display: block !important;
 }
 
-.Toolbar>.active>li {
+.Toolbar > .active > li {
     display: block !important;
 }
 
@@ -166,19 +166,23 @@ h6 {
 /*    display: none;*/
 /*}*/
 
-.icon-picker {
-    /*display: none;  */
-    width: 50%;
-    height: 100%;
+#IconPicker {
+    display: none;
+    position: fixed;
+    z-index: 100000;
+
+    width: 300px;
+    height: 150px;
+    background-color: #fff;
     border: 1px solid #ccc;
 }
 
-.icon-picker ul{
+#IconPicker ul {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     list-style: none;
 }
 
-.icon-picker ul li{
+#IconPicker ul li {
     margin: 5px;
 }
