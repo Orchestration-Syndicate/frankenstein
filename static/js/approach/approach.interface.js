@@ -147,6 +147,14 @@ function dragger() {
     $(this).bind('mousedown', function(event) { });
 }
 
+
+(function($) {
+    $.fn.findExclude = function(Selector, Mask) {
+        console.log($(this).find(Selector).not($(this).find(Mask).find(Selector)));
+        return $(this).find(Selector).not($(this).find(Mask).find(Selector))
+    }
+}(jQuery));
+
 var topChange = 0,
     fullscreenModeActive = false,
     controlsHidden = false,
@@ -186,8 +194,8 @@ var Interface = function({
             $elf.Interface = Markup;
             if ($(Markup).hasClass('controls')) {
                 $elf.Controls = $(Markup); // [ Markup] for vanilla
-                $elf.Controls.add($elf.Controls.find('.controls')); // add sub .controls to the jQUery object. array.push for vanilla
-            } else $elf.Controls = $(Markup).find('.controls'); // Markup.querySelector(".controls") for vanilla
+                $elf.Controls.add($elf.Controls.findExclude('.controls')); // add sub .controls to the jQUery object. array.push for vanilla
+            } else $elf.Controls = $(Markup).findExclude('.controls'); // Markup.querySelector(".controls") for vanilla
 
             $elf.Controls.off(event_triggers);
             $elf.Controls.on(event_triggers, function(event) {
@@ -195,7 +203,7 @@ var Interface = function({
                 $elf.call.events(event);
             });
 
-            $elf.Controls.find('.control[data-trigger]').each(function(i, el2) {
+            $elf.Controls.findExclude('.control[data-trigger]').each(function(i, el2) {
                 data_trigger = $(el2).data('trigger');
 
                 $elf.Controls.off(data_trigger);
@@ -226,9 +234,9 @@ var Interface = function({
                 }
             });
         },
-        rebind: function(el, seeking = 'controls') {
+        rebind: function(el, seeking = '.controls') {
             $($elf.Controls).off();
-            $elf.Controls = findExclude($($elf.Markup), ".controls");
+            $elf.Controls = $($elf.Markup).findExclude(seeking);
 
             $elf.Controls.on(event_triggers, function(event) {
                 $elf.call.events(event);

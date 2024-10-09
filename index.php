@@ -91,7 +91,7 @@ $head[] = new HTML(tag: 'script', attributes: [
 ]);
 $head[] = new HTML(tag: 'script', attributes: [
     'type' => 'text/javascript',
-    'src' => '/static/js/approach/approach.autoform.js',
+    'src' => '/static/js/approach/levenshtein.min.js',
 ]);
 
 $head[] = new HTML(tag: 'script', attributes: [
@@ -99,7 +99,7 @@ $head[] = new HTML(tag: 'script', attributes: [
     'type' => 'module',
 ]);
 
-$body = new HTML(tag: 'body', classes: ['Interface', ' InterfaceContent']);
+$body = new HTML(tag: 'body', classes: ['Interface', ' InterfaceContent', ' FrankensteinUI']);
 
 $body->content = <<<HTML
     <section id="Backdrop" class="Screen"></section>
@@ -107,14 +107,14 @@ $body->content = <<<HTML
     <section id="Main" class="Screen controls">
         <div id="test_area"></div>
         <!-- Left Panel -->
-        <section id="LeftPanel" class="panel-content  controls" data-api="/server.php" data-api-method="POST" >
+        <section id="LeftPanel" class="panel-content" data-api="/server.php" data-api-method="POST" >
             <div style="display: flex; margin-right: 1rem;;">
                 <label for="source">source</label>
                 <select name="source" style="height: 30px; margin-left: 10px">
                     <option value="jd">Component::ActionBox</option>
                 </select>
-                <button style="margin-left: 70px;">auto match</button>
-                <button style="margin-left: 70px;">hide bound</button>
+                <button class="control" data-role="trigger" data-action="auto-match.mapper" style="margin-left: 70px;">auto match</button>
+                <button class="control" data-role="trigger" data-action="bound-toggle.mapper" style="margin-left: 70px;">hide bound</button>
             </div>
             <div class="Oyster">
                 <div class="header control"

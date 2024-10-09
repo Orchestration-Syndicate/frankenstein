@@ -14,7 +14,7 @@ Frankenstein.main = function(config = {}) {
             dest: '#RightPanel > .Oyster',
         },
         displace: {
-            source: '#LeftPanel > .Oyster > .Toolbar .active > li[aspect-field]',
+            source: '#LeftPanel > .Oyster > ul.Toolbar .active > li[aspect-field]',
             dest: '#RightPanel > .Oyster > .Toolbar li > .visual',
             how: {
                 handle: '.visual',
@@ -56,6 +56,10 @@ Frankenstein.main = function(config = {}) {
                 console.log('state what is empty', ref);
             }
             let $dest = $(dest);
+            let $caller = $(ref.state.target[0]).closest('li');
+            // add bound class on $dest
+            $caller.addClass('mapped-source');
+            console.log('The dest is:', $caller);
             let field_name = $dest.text();
             let field_attributes = JSON.parse($dest.attr('aspect-field'));
             console.log(field_name, field_attributes);
@@ -64,6 +68,9 @@ Frankenstein.main = function(config = {}) {
             $new_pearl.find('.visual label').first().text(field_name);
             $new_pearl.find('.visual').first().attr('aspect-field', JSON.stringify(field_attributes));
             $new_pearl.find('.visual').first().attr('aspect-name', field_name);
+
+            // add .mapped class to $new_pearl
+            $new_pearl.addClass('mapped');
 
             $elf.managed.composed.push({ 'field': field_attributes, 'name': field_name });
 
@@ -85,10 +92,10 @@ Frankenstein.main = function(config = {}) {
         $(config.mapper.main).on('source-change.mapper', function(e) {
             dispatch.source_change(e, config.mapper);
         });
-        $(config.mapper.main).on('auto-match.mapper', function(e) {
+        $('#LeftPanel').on('auto-match.mapper', function(e) {
             dispatch.auto_match(e, config.mapper);
         });
-        $(config.mapper.main).on('bound-toggle.mapper', function(e) {
+        $('#LeftPanel').on('bound-toggle.mapper', function(e) {
             dispatch.bound_toggle(e, config.mapper);
         });
         $(config.mapper.main).on('empty-toggle.mapper', function(e) {
@@ -141,9 +148,37 @@ Frankenstein.main = function(config = {}) {
         },
         auto_match: function(e, host_selector) {
             let host_container = $(e.target).closest(host_selector);
+            // get all of the .mapper-field elements
+            let $fields = $('#LeftPanel').find('li[aspect-field]');
+            let $settings = $('#RightPanel').find('.mapper-pearl');
+            let arr = [];
+
+            // find the setting whose levenstein distance is the smallest and add the field to the array
+            $fields.each(function(_, field) {
+                let field_name = $(field).text();
+                $settings.each(function(_, setting) {
+                    let setting_name = $(setting).find('.visual label').first().text();
+                    console.log(typeof Levenshtein);
+                    let distance = Levenshtein.get(field_name, setting_name);
+                    arr.push({ 'field': field, 'setting': setting, 'distance': distance });
+                }
+                );
+            });
+
+            console.log(arr);
         },
         bound_toggle: function(e, host_selector) {
             let host_container = $(e.target).closest(host_selector);
+            // TODO: Change this to be from $elf.config
+            let $selector = $("#LeftPanel");
+            console.log($selector);
+            $selector.toggleClass("bound");
+            $("#RightPanel").toggleClass("bound");
+            if ($selector.hasClass("bound")) {
+                $(e.target).text("Show Bound");
+            } else {
+                $(e.target).text("Hide Bound");
+            }
         },
         empty_toggle: function(e, host_selector) {
             let host_container = $(e.target).closest(host_selector);

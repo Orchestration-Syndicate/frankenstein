@@ -170,9 +170,6 @@ class Server extends Service
                 'TRIGGER' => [
                     'changeMenu( {"selector":"' . $temp_target . '"} )' => []
                 ],
-                'REFRESH' => [
-                    '.Props' => '<div>Hello World</div>'
-                ]
             ];
         }
 
