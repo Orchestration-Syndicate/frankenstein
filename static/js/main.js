@@ -2,12 +2,14 @@ import { FrankensteinJS } from './frankenstein/frankenstein.js';
 
 addScopeJS(['Frankenstein', 'active', {}]);
 
+let FrankensteinInstance = {};
+
 let onReadyHandle = function(element, selector, markup) {
     // this sets up any .Interface found inside the block changed by server responses
     // including doc ready
-    let closest_interface_container = $(element).find(".Interface")
+    let closest_interface_container = $(element).closest(".Interface")
         .addBack('.Interface');
-    //console.log(closest_interface_container);
+    console.log("Closest Interface", closest_interface_container);
     if (closest_interface_container.length > 0) {
         let closest_interface = closest_interface_container[0].Interface;
         if (closest_interface !== undefined && closest_interface.length > 0) {
@@ -29,14 +31,12 @@ let onReadyHandle = function(element, selector, markup) {
         });
 
     // Update other plugins here if needed
-};
+    FrankensteinInstance.refresh();
+} ;
 
-let FrankensteinInstance = {};
 
 $(document).ready(function() {
-    FrankensteinInstance = new FrankensteinJS({
-
-    });
+    FrankensteinInstance = new FrankensteinJS({});
     Interface.prototype.RefreshComplete = onReadyHandle;
     onReadyHandle(document, null, null);
 });

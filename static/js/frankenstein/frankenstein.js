@@ -14,7 +14,7 @@ Frankenstein.main = function(config = {}) {
             dest: '#RightPanel > .Oyster',
         },
         displace: {
-            source: '#LeftPanel > .Oyster > ul.Toolbar .active > li[aspect-field]',
+            source: '#LeftPanel > .Oyster > .Toolbar .active > li[aspect-field]',
             dest: '#RightPanel > .Oyster > .Toolbar li > .visual',
             how: {
                 handle: '.visual',
@@ -28,6 +28,59 @@ Frankenstein.main = function(config = {}) {
         composed: [],
     };
     overwriteDefaults(config, $elf.config);
+
+    $elf.refresh = function() {
+        let config = $elf.config;
+
+        $elf.managed.inflater = new Inflate({
+            toggle_effect: 'slide',
+            toggle_speed: 800,
+            toggle_direction: 'up',
+        });
+
+        console.log("Initializing Displacer");
+
+        $elf.managed.displacer = new Displacer({
+            what: config.displace.source,
+            where: config.displace.dest,
+            how: {
+                handle: config.displace.handle,
+                remain_in_source: config.displace.how.remain_in_source,
+                emit: 'composed-append.mapper',
+            },
+        });
+
+        $elf.managed.displacer.call.complete = function(e, ref) {
+            let dest = ref.state.preview[0];
+            if (dest == null) {
+                console.log('state what is empty', ref);
+            }
+            let $dest = $(dest);
+            let $caller = $(ref.state.target[0]).closest('li');
+            // add bound class on $dest
+            $caller.addClass('mapped-source');
+            console.log('The dest is:', $caller);
+            let field_name = $dest.text();
+            let field_attributes = JSON.parse($dest.attr('aspect-field'));
+            console.log(field_name, field_attributes);
+            let $new_pearl = $(copyOffscreenControl('mapper-field'));
+            $new_pearl.find('.visual label').first().text(field_name);
+            $new_pearl.find('.visual').first().attr('aspect-field', JSON.stringify(field_attributes));
+            $new_pearl.find('.visual').first().attr('aspect-name', field_name);
+
+            // add .mapped class to $new_pearl
+            $new_pearl.addClass('mapped');
+            console.log('The new pearl is:', $new_pearl);
+            $elf.managed.composed.push({ 'field': field_attributes, 'name': field_name });
+
+            let input = $(e.target).closest('.mapper-pearl').find('input[name="composed"]').first();
+            input.val(JSON.stringify($elf.managed.composed));
+
+            console.log('The input is:', input);
+
+            $('#RightPanel > .Oyster > .Toolbar').append($new_pearl);
+        };
+    }
 
     $elf.init = function() {
         let config = $elf.config;

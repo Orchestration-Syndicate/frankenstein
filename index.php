@@ -108,7 +108,7 @@ $body->content = <<<HTML
         <div id="test_area"></div>
         <!-- Left Panel -->
         <section id="LeftPanel" class="panel-content" data-api="/server.php" data-api-method="POST" >
-            <div style="display: flex; margin-right: 1rem;;">
+            <div style="display: flex; margin-right: 1rem;">
                 <label for="source">source</label>
                 <select name="source" style="height: 30px; margin-left: 10px">
                     <option value="jd">Component::ActionBox</option>
@@ -288,11 +288,11 @@ $body->content = <<<HTML
         return sel
     }
     function copyOffscreenControl(name) {
-        return $("#Offscreen ." + name).first().prop("outerHTML");
+        return \$("#Offscreen ." + name).first().prop("outerHTML");
     };
     //function toggleDiv(e) {
     //    console.log("Hello World");
-    //    let ele = $(e.target).closest(".mapper-pearl").find(".mappable-body").first();
+    //    let ele = \$(e.target).closest(".mapper-pearl").find(".mappable-body").first();
     //    console.log(ele);
     //   if(ele.css("display") == "none"){
     //        ele.css("display", "block");

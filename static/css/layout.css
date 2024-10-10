@@ -105,11 +105,11 @@ body {
     display: block;
 }
 
-.active>li>.visual {
+.active > li > .visual {
     display: block !important;
 }
 
-.Toolbar>.active>li {
+.Toolbar > .active > li {
     display: block !important;
 }
 
@@ -191,12 +191,14 @@ h6 {
     padding: 4px 5px;
 }
 
-#RightPanel:not(.bound)>.Oyster>.Toolbar>li.mapper-pearl, div.mapper-field{
-    background-color: #FFBF9F;
+#RightPanel:not(.bound) > .Oyster > .Toolbar > li.mapper-pearl,
+div.mapper-field {
+    background-color: #ffbf9f;
 }
 
-#RightPanel.bound>.Oyster>.Toolbar>li.mapper-pearl, div.mapped{
-    background-color: #B6FCAF;
+#RightPanel.bound > .Oyster > .Toolbar > li.mapper-pearl,
+div.mapped {
+    background-color: #b6fcaf;
 }
 
 .bound {
