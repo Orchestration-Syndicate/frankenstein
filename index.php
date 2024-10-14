@@ -91,7 +91,7 @@ $head[] = new HTML(tag: 'script', attributes: [
 ]);
 $head[] = new HTML(tag: 'script', attributes: [
     'type' => 'text/javascript',
-    'src' => '/static/js/approach/levenshtein.min.js',
+    'src' => '/static/js/approach/approach.autoform.js',
 ]);
 
 $head[] = new HTML(tag: 'script', attributes: [
@@ -99,7 +99,7 @@ $head[] = new HTML(tag: 'script', attributes: [
     'type' => 'module',
 ]);
 
-$body = new HTML(tag: 'body', classes: ['Interface', ' InterfaceContent', ' FrankensteinUI']);
+$body = new HTML(tag: 'body', classes: ['Interface', ' InterfaceContent']);
 
 $body->content = <<<HTML
     <section id="Backdrop" class="Screen"></section>
@@ -107,14 +107,14 @@ $body->content = <<<HTML
     <section id="Main" class="Screen controls">
         <div id="test_area"></div>
         <!-- Left Panel -->
-        <section id="LeftPanel" class="panel-content" data-api="/server.php" data-api-method="POST" >
-            <div style="display: flex; margin-right: 1rem;">
+        <section id="LeftPanel" class="panel-content  controls" data-api="/server.php" data-api-method="POST" >
+            <div style="display: flex; margin-right: 1rem;;">
                 <label for="source">source</label>
                 <select name="source" style="height: 30px; margin-left: 10px">
                     <option value="jd">Component::ActionBox</option>
                 </select>
-                <button class="control" data-role="trigger" data-action="auto-match.mapper" style="margin-left: 70px;">auto match</button>
-                <button class="control" data-role="trigger" data-action="bound-toggle.mapper" style="margin-left: 70px;">hide bound</button>
+                <button style="margin-left: 70px;">auto match</button>
+                <button style="margin-left: 70px;">hide bound</button>
             </div>
             <div class="Oyster">
                 <div class="header control"
@@ -141,6 +141,7 @@ $body->content = <<<HTML
                     <h2>Target Component: ActionBox</h2>
                 </div>
                 <ul class="Toolbar">
+                    <!-- Toolbar items will be dynamically added here -->
                 </ul>
                 <div class="component-section prop-type-container">
                     <label for="name">Name</label>
@@ -193,10 +194,10 @@ $body->content = <<<HTML
             </div>
             <ul></ul>
         </li>
-
-    <div class="mappable-body">
-    <label>
-        prop type
+    <div id="mappab;e-form-template" style="display: none;">
+        <div class="mappable-body">
+            <label>
+                prop type
         <select class="mapper-input source-select">
             <option value="TextInput"> TextInput </option>
             <option value="TextArea"> TextArea </option>
@@ -224,27 +225,25 @@ $body->content = <<<HTML
             <option value="Date"> Date </option>
             <option value="NumericInput"> NumericInput </option>
         </select>
-    </label>
-    <div><label> default <input class="mapper-input"></label></div>
-    <div><label> label <input class="mapper-input"></label></div>
-    <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> disabled <input type="checkbox" class="mapper-input"></label></div>
-    <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> hidden <input type="checkbox" class="mapper-input"></label></div>
-    <div><label> group number <input type="number" class="mapper-input"></label></div>
-    <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> required <input type="checkbox" class="mapper-input"></label></div>
-    <div class="toolbar">
-        <input type="hidden" name="toolbar" value="{}" />
+        </label>
+        <div><label> default <input class="mapper-input"></label></div>
+        <div><label> label <input class="mapper-input"></label></div>
+        <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> disabled <input type="checkbox" class="mapper-input"></label></div>
+        <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> hidden <input type="checkbox" class="mapper-input"></label></div>
+        <div><label> group number <input type="number" class="mapper-input"></label></div>
+        <div class="control" data-role="trigger" data-action="new-setting.mapper"><label> required <input type="checkbox" class="mapper-input"></label></div>
+        <div class="toolbar">
+            <input type="hidden" name="toolbar" value="{}" />
+        </div>
+        <div class="control" data-role="trigger" data-action="toolbar-enable.mapper"><label> Toolbar <input type="checkbox" class="mapper-input"></label></div>
+        <div><label> source <input class="mapper-input"></label></div>
+        <div><label> extra <input class="mapper-input"></label></div>
+        <input type="hidden" name="composed" value="{}" />
+        <div><label> formatter <input class="mapper-input"></label></div>
+        <div><label> sanitizer <input class="mapper-input"></label></div>
+        <div><label> validator <input class="mapper-input"></label></div>
+        </div>
     </div>
-    <div class="control" data-role="trigger" data-action="toolbar-enable.mapper"><label> Toolbar <input type="checkbox" class="mapper-input"></label></div>
-    <!---->
-    <div><label> source <input class="mapper-input"></label></div>
-    <div><label> extra <input class="mapper-input"></label></div>
-            <!---->
-    <input type="hidden" name="composed" value="{}" />
-    <div><label> formatter <input class="mapper-input"></label></div>
-    <div><label> sanitizer <input class="mapper-input"></label></div>
-    <div><label> validator <input class="mapper-input"></label></div>
-    </div>
-
     <div class="mapper-field">
         <div class="visual control">
             <i class="fa"></i>
@@ -288,11 +287,11 @@ $body->content = <<<HTML
         return sel
     }
     function copyOffscreenControl(name) {
-        return \$("#Offscreen ." + name).first().prop("outerHTML");
+        return $("#Offscreen ." + name).first().prop("outerHTML");
     };
     //function toggleDiv(e) {
     //    console.log("Hello World");
-    //    let ele = \$(e.target).closest(".mapper-pearl").find(".mappable-body").first();
+    //    let ele = $(e.target).closest(".mapper-pearl").find(".mappable-body").first();
     //    console.log(ele);
     //   if(ele.css("display") == "none"){
     //        ele.css("display", "block");
