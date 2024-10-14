@@ -157,9 +157,9 @@ Frankenstein.main = function(config = {}) {
         $(config.mapper.main).on('save.mapper', function(e) {
             dispatch.save(e, config.mapper);
         });
-        $(config.mapper.dest).on('new-setting.mapper', function(e) {
-            dispatch.new_setting(e, config.mapper.dest);
-        });
+        // $(config.mapper.dest).on('new-setting.mapper', function(e) {
+        //     dispatch.new_setting(e, config.mapper.dest);
+        // });
         //TODO: Don't hardcode the overlay
         $(config.mapper.dest).on('composed-append.mapper', function(e) {
             dispatch.composed_append(e, config.displace.dest);
